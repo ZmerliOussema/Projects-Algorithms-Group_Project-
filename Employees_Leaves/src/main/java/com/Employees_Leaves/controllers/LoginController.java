@@ -93,6 +93,12 @@ public class LoginController {
 		return "emp/ch_password.jsp";
 	}
 
+	// Display ch_password.jsp Page
+	@GetMapping("/employees/edit/1")
+	public String emp_update(@ModelAttribute("updateEmp") Employee updateEmp) {
+		return "emp/emp_update.jsp";
+	}
+
 //	ACTION ROUTES
 
 	// For Displaying Dashboard Page
@@ -129,8 +135,16 @@ public class LoginController {
 
 	// For Displaying ch_password Page
 	@PostMapping("/employees/ch_password/1")
-	public String ch_password(@Valid @ModelAttribute("updateEmp") Employee updateEmp, BindingResult result,
-			Model model, HttpSession session) {
+	public String ch_password(@Valid @ModelAttribute("updateEmp") Employee updateEmp, BindingResult result, Model model,
+			HttpSession session) {
+
+		return "redirect:/employees/show/1";
+	}
+
+	// For Displaying ch_password Page
+	@PostMapping("/employees/edit/1")
+	public String update_employee(@Valid @ModelAttribute("updateEmp") Employee updateEmp, BindingResult result, Model model,
+			HttpSession session) {
 
 		return "redirect:/employees/show/1";
 	}
