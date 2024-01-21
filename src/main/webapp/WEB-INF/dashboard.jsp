@@ -23,7 +23,7 @@
 <body>
 	<div>
 		<p>User: ..........</p>
-		<a href="/addEmployeeForm">Add an Employee</a> <a href="/logout">Logout</a>
+		<a href="/employees/new">Add an Employee</a> <a href="/logout">Logout</a>
 	</div>
 	<div>
 		<p>Employee holidays for the year:
@@ -50,15 +50,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${emplyees}" var="employee">
+			<c:forEach items="${employees}" var="employee">
 				<tr>
 					<td><c:out value="${employee.firstName }"></c:out> <c:out value="${employee.lastName }"></c:out></td>
-					<td>30</td>
-					<td><c:out value="${employee.leaves.annual }"></c:out></td>
-					<td>5</td>
-					<td><c:out value="${employee.leaves.specific_leave }"></c:out></td>
-					<td>5</td>
-					<td><c:out value="${employee.leaves.sick }"></c:out></td>
 				</tr>
 			</c:forEach>
 		</tbody>

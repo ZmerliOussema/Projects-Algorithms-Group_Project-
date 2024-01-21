@@ -17,6 +17,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name="employees")
@@ -53,8 +54,8 @@ public class Employee {
 	@NotBlank(message = "Category is required!")
 	private String category;
 	
-	@NotBlank(message = "Phone Number is required!")
-	private Integer phoneNumber;
+	@NotNull(message = "Phone Number is required!")
+	private int phoneNumber;
 	
 	@NotBlank(message = "First name is required/translate")
 	private String firstNameAr;
@@ -92,113 +93,201 @@ public class Employee {
 		return id;
 	}
 
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 	public String getFirstName() {
 		return firstName;
 	}
 
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 
 	public String getLastName() {
 		return lastName;
 	}
 
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 
 	public String getEmail() {
 		return email;
 	}
 
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 
 	public String getUserName() {
 		return userName;
 	}
 
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
 
 	public String getPassword() {
 		return password;
 	}
 
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 
 	public String getAddress() {
 		return address;
 	}
 
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 
 	public String getTitle() {
 		return title;
 	}
 
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 
 	public String getRangeEmployee() {
 		return rangeEmployee;
 	}
 
+
 	public void setRangeEmployee(String rangeEmployee) {
 		this.rangeEmployee = rangeEmployee;
 	}
+
 
 	public String getCategory() {
 		return category;
 	}
 
+
 	public void setCategory(String category) {
 		this.category = category;
 	}
 
-	public Integer getPhoneNumber() {
+
+	public int getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(Integer phoneNumber) {
+
+	public void setPhoneNumber(int phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+
+
+	public String getFirstNameAr() {
+		return firstNameAr;
+	}
+
+
+	public void setFirstNameAr(String firstNameAr) {
+		this.firstNameAr = firstNameAr;
+	}
+
+
+	public String getLastNameAr() {
+		return lastNameAr;
+	}
+
+
+	public void setLastNameAr(String lastNameAr) {
+		this.lastNameAr = lastNameAr;
+	}
+
+
+	public String getAddressAr() {
+		return addressAr;
+	}
+
+
+	public void setAddressAr(String addressAr) {
+		this.addressAr = addressAr;
+	}
+
+
+	public String getTitleAr() {
+		return titleAr;
+	}
+
+
+	public void setTitleAr(String titleAr) {
+		this.titleAr = titleAr;
+	}
+
+
+	public String getRangeAr() {
+		return rangeAr;
+	}
+
+
+	public void setRangeAr(String rangeAr) {
+		this.rangeAr = rangeAr;
+	}
+
+
+	public String getCategoryAr() {
+		return categoryAr;
+	}
+
+
+	public void setCategoryAr(String categoryAr) {
+		this.categoryAr = categoryAr;
+	}
+
 
 	public Date getCreatedAt() {
 		return createdAt;
 	}
 
+
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
+
 
 	public Date getUpdatedAt() {
 		return updatedAt;
 	}
 
+
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
 
 	public List<Leave> getLeaves() {
 		return leaves;
 	}
 
+
 	public void setLeaves(List<Leave> leaves) {
 		this.leaves = leaves;
 	}
+
 
 	@PrePersist
 	protected void onCreate() {
