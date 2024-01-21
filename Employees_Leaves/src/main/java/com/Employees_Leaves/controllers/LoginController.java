@@ -32,6 +32,14 @@ public class LoginController {
 		return "login.jsp";
 	}
 	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+
+		session.invalidate();
+
+		return "redirect:/login";
+	}
+	
 	// Display admin_dashboard Page
 	@GetMapping("/admin_dashboard")
 	public String admin_dashboard() {
