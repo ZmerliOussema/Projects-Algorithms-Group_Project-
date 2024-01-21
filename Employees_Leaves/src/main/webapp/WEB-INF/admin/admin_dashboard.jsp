@@ -31,7 +31,7 @@
 				style="width: 20%;">
 				<a href="/logout" class="btn btn-primary fw-bold"
 					style="width: 100px; background-color: #5b96c7ef; color: #ffffffc5;">خروج</a>
-				<a href="/add_emp"
+				<a href="/employees/add_emp"
 					class="link-underline-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
 					style="color: #ffffffc5;">إضافة عون</a>
 			</div>

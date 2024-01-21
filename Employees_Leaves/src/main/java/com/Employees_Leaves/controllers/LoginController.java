@@ -28,7 +28,7 @@ public class LoginController {
 		// Bind empty LoginUser object to the JSP
 		// to capture the form input
 
-		model.addAttribute("newLogin", new Employee());
+		model.addAttribute("newLogin", new LoginEmployee());
 		return "login.jsp";
 	}
 	
@@ -44,16 +44,27 @@ public class LoginController {
 			return "emp/emp_dashboard.jsp";
 		}
 		
+	// Display add_emp Page
+		@GetMapping("/employees/add_emp")
+		public String add_emp(Model model) {
+			model.addAttribute("newEmployee", new Employee());
+			return "emp/add_emp.jsp";
+		}
+		
+		
+		
 //	ACTION ROUTES
 	
 	// For Displaying Dashboard Page
-	@PostMapping("/login")
-	public String login(@Valid @ModelAttribute("newLogin") LoginEmployee newLogin,
-			BindingResult result,
-			Model model,
-			HttpSession session) {
-
-		return "redirect:/admin_dashboard";
-	}
+		@PostMapping("/login")
+		public String login(@Valid @ModelAttribute("newLogin") LoginEmployee newLogin,
+				BindingResult result,
+				Model model,
+				HttpSession session) {
+	
+			return "redirect:/admin_dashboard";
+		}
+	
+	// For Displaying add_emp Page
 	
 }
