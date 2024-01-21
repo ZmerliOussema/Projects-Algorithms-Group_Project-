@@ -32,11 +32,17 @@ public class LoginController {
 		return "login.jsp";
 	}
 	
-	// Display Dashboard Page
+	// Display admin_dashboard Page
 	@GetMapping("/admin_dashboard")
-	public String dashboard() {
+	public String admin_dashboard() {
 		return "admin/admin_dashboard.jsp";
 	}
+	
+	// Display emp_dashboard Page
+		@GetMapping("/employees/test")
+		public String emp_dashboard() {
+			return "emp/emp_dashboard.jsp";
+		}
 		
 //	ACTION ROUTES
 	

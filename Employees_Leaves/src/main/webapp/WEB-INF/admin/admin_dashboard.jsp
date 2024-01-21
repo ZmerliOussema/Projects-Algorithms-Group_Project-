@@ -86,8 +86,9 @@
 					<td>19</td>
 					<td>11</td>
 					<td class="table-active text-end"><a
-						href="/employees/{{ leave.employee.id }}"
-						class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-dark fw-medium">نزار الجويني</a>
+						href="/employees/test"
+						class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-dark fw-medium">
+						نزار الجويني</a>
 					</td>
 				</tr>
 			</tbody>
