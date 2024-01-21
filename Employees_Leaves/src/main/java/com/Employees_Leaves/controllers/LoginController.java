@@ -67,28 +67,52 @@ public class LoginController {
 		return "emp/emp_annual_leaves.jsp";
 	}
 
+	// Display emp_annual_leaves.jsp Page
+	@GetMapping("/employees/specific/1")
+	public String emp_specific_leaves(Model model) {
+		model.addAttribute("newLeave", new Leave());
+		return "emp/emp_specific_leaves.jsp";
+	}
+
+	// Display emp_annual_leaves.jsp Page
+	@GetMapping("/employees/sick/1")
+	public String emp_sick_leaves(Model model) {
+		model.addAttribute("newLeave", new Leave());
+		return "emp/emp_sick_leaves.jsp";
+	}
+
 //	ACTION ROUTES
 
 	// For Displaying Dashboard Page
 	@PostMapping("/login")
-	public String login(@Valid @ModelAttribute("newLogin") LoginEmployee newLogin,
-						BindingResult result,
-						Model model,
-						HttpSession session) {
+	public String login(@Valid @ModelAttribute("newLogin") LoginEmployee newLogin, BindingResult result, Model model,
+			HttpSession session) {
 
 		return "redirect:/admin_dashboard";
 	}
 
 	// For Displaying add_emp Page
 	@PostMapping("/employees/annual/1/add")
-	public String add_emp_annual_leaves(@Valid @ModelAttribute("newLeave") Leave newLeave,
-										BindingResult result,
-										Model model,
-										HttpSession session) {
+	public String add_emp_annual_leaves(@Valid @ModelAttribute("newLeave") Leave newLeave, BindingResult result,
+			Model model, HttpSession session) {
 
 		return "redirect:/employees/annual/1";
 	}
 
-	
-	
+	// For Displaying add_emp Page
+	@PostMapping("/employees/specific/1/add")
+	public String add_emp_specific_leaves(@Valid @ModelAttribute("newLeave") Leave newLeave, BindingResult result,
+			Model model, HttpSession session) {
+
+		return "redirect:/employees/specific/1";
+	}
+
+	// For Displaying add_emp Page
+	@PostMapping("/employees/sick/1/add")
+	public String add_emp_sick_leaves(@Valid @ModelAttribute("newLeave") Leave newLeave, BindingResult result,
+			Model model, HttpSession session) {
+
+		return "redirect:/employees/sick/1";
+	}
+
 }

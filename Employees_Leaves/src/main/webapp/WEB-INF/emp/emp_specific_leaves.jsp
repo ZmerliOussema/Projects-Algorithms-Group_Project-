@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page isErrorPage="true"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
@@ -25,7 +25,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 	crossorigin="anonymous"></script>
-<title>Employee Annual Leaves</title>
+<title>Employee Specific leaves</title>
 </head>
 <body style="background-color: #161615;">
 	<div class="container my-3 border border-primary"
@@ -59,7 +59,7 @@
 					</select>
 				</form>
 				<h3 class="text text-center text-dark fw-semibold">
-					العطل السنوية الخاصة ب <a
+					العطل الإستثنائية الخاصة ب <a
 						href="/employees/show/{{ annual_leaves_by_employee[0].employee.id }}"
 						class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
 						نزار الجويني</a> لسنة
@@ -70,7 +70,7 @@
 				<h5 class="text text-center text-dark fw-semibold"
 					style="color: #ffffffc5;">يوما في السنة</h5>
 				<h5 class="text text-center text-dark fw-semibold"
-					style="color: #ffffffc5;">45</h5>
+					style="color: #ffffffc5;">06</h5>
 			</div>
 		</div>
 		<div class="d-flex justify-content-end mt-3">
@@ -82,7 +82,7 @@
 			class="table table-secondary table-striped table-hover text text-center">
 			<thead>
 				<tr>
-					<th colspan="2">العطل السنوية</th>
+					<th colspan="2">العطل الإستثنائية</th>
 					<th rowspan="2" class="table-active col col-3 align-middle">تاريخ
 						النهاية</th>
 					<th rowspan="2" class="col col-3 align-middle">تاريخ البداية</th>
@@ -94,13 +94,13 @@
 			</thead>
 			<tbody class="table-group-divider">
 				<tr class="border-bottom border-dark-subtle"></tr>
-					<td>42</td>
-					<td>03</td>
-					<td class="table-active text-end">2024/07/29</td>
-					<td class="text-end">2024/07/27</td>
+					<td>04</td>
+					<td>02</td>
+					<td class="table-active text-end">2023/03/15</td>
+					<td class="text-end">2023/03/16</td>
 				</tr>
 				<form:form
-					 action="/employees/annual/1/add" method="post" modelAttribute="newLeave">
+					 action="/employees/specific/1/add" method="post" modelAttribute="newLeave">
 					<tr>
 						<div class="d-flex justify-content-center align-items-center">
 							<td>
