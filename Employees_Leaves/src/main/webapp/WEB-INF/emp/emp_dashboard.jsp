@@ -60,9 +60,9 @@
         <table class="table table-secondary table-striped table-hover text text-center">
             <thead>
                 <tr>
-                    <th colspan="2"><a href="/employees/sick/{{ leaves_by_employee[0].employee.id }}" class="link-underline-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text text-primary">العطل المرضية</a></th>
-                    <th colspan="2" class="table-active border-bottom border-dark-subtle"><a href="/employees/specific/{{ leaves_by_employee[0].employee.id }}" class="link-underline-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text text-primary">العطل الإستثنائية</a></th>
-                    <th colspan="2"><a href="/employees/annual/{{ leaves_by_employee[0].employee.id }}" class="link-underline-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text text-primary">العطل السنوية</a></th>
+                    <th colspan="2"><a href="/employees/sick/1" class="link-underline-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text text-primary">العطل المرضية</a></th>
+                    <th colspan="2" class="table-active border-bottom border-dark-subtle"><a href="/employees/specific/1" class="link-underline-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text text-primary">العطل الإستثنائية</a></th>
+                    <th colspan="2"><a href="/employees/annual/1" class="link-underline-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text text-primary">العطل السنوية</a></th>
                     <th rowspan="2" class="table-active col col-3 align-middle">تاريخ النهاية</th>
                     <th rowspan="2" class="col col-3 align-middle">تاريخ البداية</th>
                 </tr>
@@ -89,8 +89,5 @@
             </tbody>
         </table>
     </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 </html>
