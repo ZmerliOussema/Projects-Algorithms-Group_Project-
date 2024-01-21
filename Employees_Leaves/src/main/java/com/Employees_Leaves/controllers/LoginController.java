@@ -67,18 +67,24 @@ public class LoginController {
 		return "emp/emp_annual_leaves.jsp";
 	}
 
-	// Display emp_annual_leaves.jsp Page
+	// Display emp_specific_leaves.jsp Page
 	@GetMapping("/employees/specific/1")
 	public String emp_specific_leaves(Model model) {
 		model.addAttribute("newLeave", new Leave());
 		return "emp/emp_specific_leaves.jsp";
 	}
 
-	// Display emp_annual_leaves.jsp Page
+	// Display emp_sick_leaves.jsp Page
 	@GetMapping("/employees/sick/1")
 	public String emp_sick_leaves(Model model) {
 		model.addAttribute("newLeave", new Leave());
 		return "emp/emp_sick_leaves.jsp";
+	}
+
+	// Display emp_details.jsp Page
+	@GetMapping("/employees/show/1")
+	public String emp_sdetails(Model model) {
+		return "emp/emp_details.jsp";
 	}
 
 //	ACTION ROUTES

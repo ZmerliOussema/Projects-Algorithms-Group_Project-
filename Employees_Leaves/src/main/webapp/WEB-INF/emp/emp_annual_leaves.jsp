@@ -10,10 +10,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="/css/main.css">
-<!-- change to match your file/naming structure -->
-<script type="text/javascript" src="/js/app.js"></script>
-<!-- change to match your file/naming structure -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -60,7 +56,7 @@
 				</form>
 				<h3 class="text text-center text-dark fw-semibold">
 					العطل السنوية الخاصة ب <a
-						href="/employees/show/{{ annual_leaves_by_employee[0].employee.id }}"
+						href="/employees/show/1"
 						class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
 						نزار الجويني</a> لسنة
 				</h3>
