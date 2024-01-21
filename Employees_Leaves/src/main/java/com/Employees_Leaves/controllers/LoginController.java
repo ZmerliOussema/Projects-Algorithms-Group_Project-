@@ -83,8 +83,14 @@ public class LoginController {
 
 	// Display emp_details.jsp Page
 	@GetMapping("/employees/show/1")
-	public String emp_sdetails(Model model) {
+	public String emp_sdetails() {
 		return "emp/emp_details.jsp";
+	}
+
+	// Display ch_password.jsp Page
+	@GetMapping("/employees/ch_password/1")
+	public String ch_password(@ModelAttribute("updateEmp") Employee updateEmp) {
+		return "emp/ch_password.jsp";
 	}
 
 //	ACTION ROUTES
@@ -97,7 +103,7 @@ public class LoginController {
 		return "redirect:/admin_dashboard";
 	}
 
-	// For Displaying add_emp Page
+	// For Displaying emp_annual_leaves Page
 	@PostMapping("/employees/annual/1/add")
 	public String add_emp_annual_leaves(@Valid @ModelAttribute("newLeave") Leave newLeave, BindingResult result,
 			Model model, HttpSession session) {
@@ -105,7 +111,7 @@ public class LoginController {
 		return "redirect:/employees/annual/1";
 	}
 
-	// For Displaying add_emp Page
+	// For Displaying emp_specific_leaves Page
 	@PostMapping("/employees/specific/1/add")
 	public String add_emp_specific_leaves(@Valid @ModelAttribute("newLeave") Leave newLeave, BindingResult result,
 			Model model, HttpSession session) {
@@ -113,12 +119,20 @@ public class LoginController {
 		return "redirect:/employees/specific/1";
 	}
 
-	// For Displaying add_emp Page
+	// For Displaying emp_sick_leaves Page
 	@PostMapping("/employees/sick/1/add")
 	public String add_emp_sick_leaves(@Valid @ModelAttribute("newLeave") Leave newLeave, BindingResult result,
 			Model model, HttpSession session) {
 
 		return "redirect:/employees/sick/1";
+	}
+
+	// For Displaying ch_password Page
+	@PostMapping("/employees/ch_password/1")
+	public String ch_password(@Valid @ModelAttribute("updateEmp") Employee updateEmp, BindingResult result,
+			Model model, HttpSession session) {
+
+		return "redirect:/employees/show/1";
 	}
 
 }
