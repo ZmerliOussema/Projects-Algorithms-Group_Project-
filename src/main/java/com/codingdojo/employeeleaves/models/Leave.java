@@ -1,6 +1,7 @@
 package com.codingdojo.employeeleaves.models;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,8 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -30,11 +30,14 @@ public class Leave {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 
-	private Integer annualLeave;
+	private Integer annualTaken;
+	private Integer annualRest;
 
-	private Integer specificLeave;
+	private Integer specificTaken;
+	private Integer specificRest;
 
-	private Integer sickLeave;
+	private Integer sickTaken;
+	private Integer sickRest;
 
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -43,9 +46,8 @@ public class Leave {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updatedAt;
 	
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="employee_id")
-    private Employee employee;
+	 @OneToMany(mappedBy="leave", fetch = FetchType.LAZY)
+	 private List<Employee> employees;
 
 	public Leave() {
 		
@@ -75,28 +77,52 @@ public class Leave {
 		this.endDate = endDate;
 	}
 
-	public Integer getAnnualLeave() {
-		return annualLeave;
+	public Integer getAnnualTaken() {
+		return annualTaken;
 	}
 
-	public void setAnnualLeave(Integer annualLeave) {
-		this.annualLeave = annualLeave;
+	public void setAnnualTaken(Integer annualTaken) {
+		this.annualTaken = annualTaken;
 	}
 
-	public Integer getSpecificLeave() {
-		return specificLeave;
+	public Integer getAnnualRest() {
+		return annualRest;
 	}
 
-	public void setSpecificLeave(Integer specificLeave) {
-		this.specificLeave = specificLeave;
+	public void setAnnualRest(Integer annualRest) {
+		this.annualRest = annualRest;
 	}
 
-	public Integer getSickLeave() {
-		return sickLeave;
+	public Integer getSpecificTaken() {
+		return specificTaken;
 	}
 
-	public void setSickLeave(Integer sickLeave) {
-		this.sickLeave = sickLeave;
+	public void setSpecificTaken(Integer specificTaken) {
+		this.specificTaken = specificTaken;
+	}
+
+	public Integer getSpecificRest() {
+		return specificRest;
+	}
+
+	public void setSpecificRest(Integer specificRest) {
+		this.specificRest = specificRest;
+	}
+
+	public Integer getSickTaken() {
+		return sickTaken;
+	}
+
+	public void setSickTaken(Integer sickTaken) {
+		this.sickTaken = sickTaken;
+	}
+
+	public Integer getSickRest() {
+		return sickRest;
+	}
+
+	public void setSickRest(Integer sickRest) {
+		this.sickRest = sickRest;
 	}
 
 	public Date getCreatedAt() {
@@ -114,15 +140,15 @@ public class Leave {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
 	
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = new Date();
