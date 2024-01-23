@@ -62,12 +62,12 @@ public class EmployeeController {
 	}
 
 	// Get Employee By Id
-	@GetMapping("/emplyees/{id}")
+	@GetMapping("/employees/{id}")
 	public String getEmployeeById(Model model, @PathVariable("id") Long id, HttpSession session) {
 
 		Employee employee = employeeService.findEmployee(id);
 		model.addAttribute("employee", employee);
-		return "emmployeeDetails.jsp";
+		return "employeeDetails.jsp";
 	}
 
 	// Display Route: Show Edit Form for Employee
@@ -86,7 +86,7 @@ public class EmployeeController {
 			HttpSession session) {
 
 		if (result.hasErrors()) {
-			return "editBookForm.jsp";
+			return "editEmployeeForm.jsp";
 		} else {
 
 			employeeService.updateEmployee(employee);
