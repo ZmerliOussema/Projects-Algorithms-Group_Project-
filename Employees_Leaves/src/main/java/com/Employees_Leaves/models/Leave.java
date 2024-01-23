@@ -32,7 +32,7 @@ public class Leave {
 
 	private int annual;
 
-	private int specific_leave;
+	private int specificLeave;
 
 	private int sick;
 
@@ -43,9 +43,9 @@ public class Leave {
 	private Date updatedAt;
 
 	
-    @ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="employee_id")
-    private Employee employee;
+    private Employee owner;
     
 	@PrePersist
 	protected void onCreate() {
@@ -92,12 +92,14 @@ public class Leave {
 		this.annual = annual;
 	}
 
-	public int getSpecific_leave() {
-		return specific_leave;
+
+
+	public int getSpecificLeave() {
+		return specificLeave;
 	}
 
-	public void setSpecific_leave(int specific_leave) {
-		this.specific_leave = specific_leave;
+	public void setSpecificLeave(int specificLeave) {
+		this.specificLeave = specificLeave;
 	}
 
 	public int getSick() {
@@ -123,5 +125,15 @@ public class Leave {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
+	public Employee getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Employee owner) {
+		this.owner = owner;
+	}
+
+
+
 }

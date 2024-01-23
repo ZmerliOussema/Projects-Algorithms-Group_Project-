@@ -42,5 +42,20 @@ public class LeaveService {
 			return null;
 		}
 	}
+	
+	 public List<Leave> getAnnualLeavesByEmployeeId(Long employeeId) {
+	        return leaveRepo.findByOwner_IdAndAnnualGreaterThan(employeeId, 0);
+	    }
+	 public List<Leave> getSickLeavesByEmployeeId(Long employeeId) {
+	        return leaveRepo.findByOwner_IdAndSickGreaterThan(employeeId, 0);
+	    }
+	 
+	 public List<Leave> getSpecificLeavesByEmployeeId(Long employeeId) {
+	        return leaveRepo.findByOwner_IdAndSpecificLeaveGreaterThan(employeeId, 0);
+	    }
+	 
+	 public List<Leave> getLeavesByEmployeeId(Long employeeId) {
+	        return leaveRepo.findByOwner_Id(employeeId);
+	    }
 
 }
