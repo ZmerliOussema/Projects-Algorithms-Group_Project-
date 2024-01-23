@@ -74,7 +74,7 @@
                         <td class="table-active text-end">
                             <a href="/employees/test"
                                 class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-dark fw-medium">
-                                <c:out value="${employee.firstNameAr}"></c:out>
+                                <c:out value="${employee.firstNameAr}"></c:out> <c:out value="${employee.lastNameAr}"></c:out>
                             </a>
                         </td>
                     </tr>

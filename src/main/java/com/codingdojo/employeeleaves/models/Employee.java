@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -83,12 +84,10 @@ public class Employee {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updatedAt;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="leave_id")
-    private Leave leave;
+	 @OneToMany(mappedBy="employee", fetch = FetchType.LAZY)
+	 private List<Leave> leaves;
 
 	public Employee() {
-		this.leave = new Leave();
 	}
 
 	public Long getId() {
@@ -243,12 +242,12 @@ public class Employee {
 		this.updatedAt = updatedAt;
 	}
 
-	public Leave getLeave() {
-		return leave;
+	public List<Leave> getLeaves() {
+		return leaves;
 	}
 
-	public void setLeave(Leave leave) {
-		this.leave = leave;
+	public void setLeaves(List<Leave> leaves) {
+		this.leaves = leaves;
 	}
 
 	@PrePersist

@@ -21,12 +21,12 @@ public class EmployeeService {
 	}
 
 	// Create an employee
-	public Employee createEmplyee(Employee e) {
+	public Employee createEmployee(Employee e) {
 		return employeeRepo.save(e);
 	}
 
 	// Get an employee by Id
-	public Employee findBook(Long id) {
+	public Employee findEmployee(Long id) {
 		Optional<Employee> maybeEmployee = employeeRepo.findById(id);
 		if (maybeEmployee.isPresent()) {
 			return maybeEmployee.get();
