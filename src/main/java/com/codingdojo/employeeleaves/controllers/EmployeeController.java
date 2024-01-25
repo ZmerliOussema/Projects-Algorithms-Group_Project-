@@ -1,6 +1,8 @@
 package com.codingdojo.employeeleaves.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.codingdojo.employeeleaves.models.Employee;
+import com.codingdojo.employeeleaves.models.Leave;
 import com.codingdojo.employeeleaves.services.EmployeeService;
+import com.codingdojo.employeeleaves.services.LeaveService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -24,17 +28,55 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private LeaveService leaveService;
+	
+	//*****View all leaves for admin******		
+		@GetMapping("/dashboard")
+		public String adminDashboard(HttpSession session, Model model, Leave leave) {
 
-	// Get All Employees
-	@GetMapping("/dashboard")
-	public String dashboard(Model model) {
+			List<Leave> leaves = leaveService.all(); // get all leaves
+			Map<Long, Map<String, Object>> combinedLeaves = new HashMap<>(); // create map for combined leaves
 
-		// Grab all employees
-		List<Employee> employees = employeeService.getAllEmployees();
-		model.addAttribute("employees", employees);
+			for (Leave leave1 : leaves) { // loop through leaves
+				Long ownerId = leave1.getEmployee().getId(); // get Employee id
+				String ownerFirstName = leave1.getEmployee().getFirstNameAr(); // get owner first name
+				String ownerLastName = leave1.getEmployee().getLastNameAr(); // get owner last name
 
-		return "dashboard.jsp";
-	}
+				Map<String, Object> ownerData = combinedLeaves.computeIfAbsent(ownerId, k -> new HashMap<>()); // create map for owner data
+				ownerData.put("firstName", ownerFirstName); // add owner first name to map
+				ownerData.put("lastName", ownerLastName); // add owner last name to map
+				ownerData.put("annual", (int) ownerData.getOrDefault("annual", 0) + leave1.getAnnual()); // add annual leave
+																											// to map
+				ownerData.put("specificLeave",
+						(int) ownerData.getOrDefault("specificLeave", 0) + leave1.getSpecificLeave()); // add specific leave
+																										// to map
+				ownerData.put("sick", (int) ownerData.getOrDefault("sick", 0) + leave1.getSick()); // add sick leave to map
+			}
+
+			// Loop through all employees and include those who don't have leaves
+			List<Employee> allEmployees = employeeService.getAllEmployees();
+			for (Employee employee : allEmployees) {
+				Long employeeId = employee.getId();
+				if (!combinedLeaves.containsKey(employeeId)) {
+					Map<String, Object> ownerData = new HashMap<>();
+					ownerData.put("firstName", employee.getFirstName());
+					ownerData.put("lastName", employee.getLastName());
+					ownerData.put("annual", 0);
+					ownerData.put("specificLeave", 0);
+					ownerData.put("sick", 0);
+
+					combinedLeaves.put(employeeId, ownerData);
+				}
+			}
+
+			model.addAttribute("combinedLeaves", combinedLeaves); // add combined leaves to model
+
+//			model.addAttribute("user", employeeService.findById(loggedInUserId));
+			model.addAttribute("employees", allEmployees);
+			return "dashboard.jsp";
+		}
 
 	// Display Route: Show add-Employee Form
 	@GetMapping("/employees/new")

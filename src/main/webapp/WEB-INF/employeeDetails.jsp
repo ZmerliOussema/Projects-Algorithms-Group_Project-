@@ -29,7 +29,7 @@
 		<nav class="d-flex justify-content-between mt-3">
 			<div class="d-flex justify-content-between align-items-center"
 				style="width: 20%;">
-				<a href="/admin_dashboard"><i
+				<a href="/dashboard"><i
 					class='fa fa-home w3-xlarge btn btn-primary fw-bold'
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
 				<a href="/employees/ch_password/1"

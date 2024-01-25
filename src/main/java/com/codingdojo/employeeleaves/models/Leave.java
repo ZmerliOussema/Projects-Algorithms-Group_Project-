@@ -32,14 +32,11 @@ public class Leave {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 
-	private Integer annualTaken;
-	private Integer annualRest;
+	private int annual;
 
-	private Integer specificTaken;
-	private Integer specificRest;
+	private int specificLeave;
 
-	private Integer sickTaken;
-	private Integer sickRest;
+	private int sick;
 
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -80,52 +77,29 @@ public class Leave {
 		this.endDate = endDate;
 	}
 
-	public Integer getAnnualTaken() {
-		return annualTaken;
+	
+	public int getAnnual() {
+		return annual;
 	}
 
-	public void setAnnualTaken(Integer annualTaken) {
-		this.annualTaken = annualTaken;
+	public void setAnnual(int annual) {
+		this.annual = annual;
 	}
 
-	public Integer getAnnualRest() {
-		return annualRest;
+	public int getSpecificLeave() {
+		return specificLeave;
 	}
 
-	public void setAnnualRest(Integer annualRest) {
-		this.annualRest = annualRest;
+	public void setSpecificLeave(int specificLeave) {
+		this.specificLeave = specificLeave;
 	}
 
-	public Integer getSpecificTaken() {
-		return specificTaken;
+	public int getSick() {
+		return sick;
 	}
 
-	public void setSpecificTaken(Integer specificTaken) {
-		this.specificTaken = specificTaken;
-	}
-
-	public Integer getSpecificRest() {
-		return specificRest;
-	}
-
-	public void setSpecificRest(Integer specificRest) {
-		this.specificRest = specificRest;
-	}
-
-	public Integer getSickTaken() {
-		return sickTaken;
-	}
-
-	public void setSickTaken(Integer sickTaken) {
-		this.sickTaken = sickTaken;
-	}
-
-	public Integer getSickRest() {
-		return sickRest;
-	}
-
-	public void setSickRest(Integer sickRest) {
-		this.sickRest = sickRest;
+	public void setSick(int sick) {
+		this.sick = sick;
 	}
 
 	public Date getCreatedAt() {

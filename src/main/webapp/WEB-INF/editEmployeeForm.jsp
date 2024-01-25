@@ -35,7 +35,7 @@
 			style="width: 1000px; background-color: #DAA520;">
 			<div class="text-center">
 				<h1 style="color: #ffffffc5;">Edit - تحيين</h1>
-				<a href="/admin_dashboard"><i
+				<a href="/dashboard"><i
 					class='fa fa-home w3-xlarge btn btn-primary fw-bold'
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
 			</div>
