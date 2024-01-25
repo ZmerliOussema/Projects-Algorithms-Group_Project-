@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.codingdojo.employeeleaves.models.Employee;
 import com.codingdojo.employeeleaves.models.Leave;
+import com.codingdojo.employeeleaves.models.User;
 import com.codingdojo.employeeleaves.services.EmployeeService;
 import com.codingdojo.employeeleaves.services.LeaveService;
+import com.codingdojo.employeeleaves.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -31,6 +33,9 @@ public class EmployeeController {
 	
 	@Autowired
 	private LeaveService leaveService;
+	
+	@Autowired
+	private UserService userService;
 	
 	//*****View all leaves for admin******		
 		@GetMapping("/dashboard")
@@ -94,9 +99,20 @@ public class EmployeeController {
 		if (result.hasErrors()) {
 			return "createEmployeeForm.jsp";
 		} else {
-
+			
 			// Save Employee in DB
-			Employee newEmployee = employeeService.createEmployee(employee);
+	        Employee newEmployee = employeeService.createEmployee(employee);
+
+	        // Create a corresponding User with role "USER"
+	        User newUser = new User();
+	        newUser.setEmail(newEmployee.getEmail());
+	        newUser.setPassword(newEmployee.getPassword());
+	        newUser.setConfirmPW(newEmployee.getConfirmPassword());
+	        newUser.setRole("USER");
+	        newUser.setEmployee(newEmployee);
+
+	        // Save the User in DB
+	        userService.register(newUser, result);
 
 			return "redirect:/dashboard";
 		}
