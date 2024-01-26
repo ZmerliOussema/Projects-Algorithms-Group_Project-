@@ -42,24 +42,27 @@
 				<div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">First Name:</label>
+						<form:errors path="firstName" class="text-danger" />
 						<form:input path="firstName" type="text" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">Last Name:</label>
+						<form:errors path="lastName" class="text-danger" />
 						<form:input path="lastName" type="text" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label class="form-label fw-bold">E-mail (البريد
-							الالكتروني):</label>
+						<label class="form-label fw-bold">E-mail (البريد الالكتروني):</label>
+						<form:errors path="email" class="text-danger" />
 						<form:input path="email" type="email" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label class="form-label fw-bold" style="color: #8a0f0f;">Password
-							(كلمة العبور):</label>
+						<label class="form-label fw-bold" style="color: #8a0f0f;">Password (كلمة العبور):</label>
+						<form:errors path="password" class="text-danger" />
 						<form:password path="password" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">Address:</label>
+						<form:errors path="address" class="text-danger" />
 						<form:textarea path="address" class="form-control" rows="2" />
 					</div>
 					<div class="form-label d-flex justify-content-between"
@@ -102,25 +105,27 @@
 				<div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label d-flex justify-content-end fw-bold">:الإسم</label>
+						<form:errors path="firstNameAr" class="text-danger" />
 						<form:input path="firstNameAr" type="text" class="form-control text-end" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label d-flex justify-content-end fw-bold">:اللقب</label>
+						<form:errors path="lastNameAr" class="text-danger" />
 						<form:input path="lastNameAr" type="text" class="form-control text-end" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label class="form-label fw-bold">Phone Number (رقم
-							الهاتف):</label>
+						<label class="form-label fw-bold">Phone Number (رقم الهاتف):</label>
+						<form:errors path="phoneNumber" class="text-danger" />
 						<form:input path="phoneNumber" type="text" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label class="form-label fw-bold" style="color: #8a0f0f;">Confirm
-							Password (تأكيد كلمة العبور):</label>
+						<label class="form-label fw-bold" style="color: #8a0f0f;">Confirm Password (تأكيد كلمة العبور):</label>
+						<form:errors path="confirmPassword" class="text-danger" />
 						<form:input path="confirmPassword" type="password" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label
-							class="form-label d-flex justify-content-end fw-bold fw-bold">:العنوان</label>
+						<label class="form-label d-flex justify-content-end fw-bold fw-bold">:العنوان</label>
+						<form:errors path="addressAr" class="text-danger" />
 						<form:textarea path="addressAr" class="form-control text-end" rows="2" />
 					</div>
 					<div class="mb-3" style="width: 470px;">

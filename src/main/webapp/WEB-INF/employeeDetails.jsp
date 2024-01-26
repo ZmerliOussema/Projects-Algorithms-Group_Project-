@@ -32,10 +32,10 @@
 				<a href="/dashboard"><i
 					class='fa fa-home w3-xlarge btn btn-primary fw-bold'
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
-				<a href="/employees/ch_password/1"
+				<a href="/employees/${employee.user.id }/changePW"
 					class="link-underline-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
 					style="color: #ffffffc5;">تغيير كلمة العبور</a> <a
-					href="/employees/${employee.id }/edit"
+					href="/employees/${employee.id}/edit"
 					class="link-underline-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
 					style="color: #ffffffc5;">تحيين</a>
 			</div>

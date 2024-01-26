@@ -34,6 +34,12 @@ public class EmployeeService {
 			return null;
 		}
 	}
+	
+	// Find an employee by user_id
+    public Employee findEmployeeByUserId(Long userId) {
+        Optional<Employee> maybeEmployee = employeeRepo.findByUserId(userId);
+        return maybeEmployee.orElse(null);
+    }
 
 	// Update an employee
 	public Employee updateEmployee(Employee e) {

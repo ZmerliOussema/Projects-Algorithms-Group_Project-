@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Transient;
 
 @Entity
 public class User {
@@ -22,17 +24,25 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private String firstName;
+	
+	private String lastName;
+	
+	private String firstNameAr;
+	
+	private String lastNameAr;
+	
 	private String email;
 	
 	private String password;
 	
+	@Transient
 	private String confirmPW;
 	
 	private String Role;
 	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="employee_id")
-	private Employee employee;
+	 @OneToOne(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	 private Employee employee;
 	
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -107,6 +117,38 @@ public class User {
 
 	public void setConfirmPW(String confirmPW) {
 		this.confirmPW = confirmPW;
+	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFirstNameAr() {
+		return firstNameAr;
+	}
+
+	public void setFirstNameAr(String firstNameAr) {
+		this.firstNameAr = firstNameAr;
+	}
+
+	public String getLastNameAr() {
+		return lastNameAr;
+	}
+
+	public void setLastNameAr(String lastNameAr) {
+		this.lastNameAr = lastNameAr;
 	}
 
 	@PrePersist

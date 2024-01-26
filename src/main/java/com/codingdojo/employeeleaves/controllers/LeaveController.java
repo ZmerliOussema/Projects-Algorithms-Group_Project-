@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.codingdojo.employeeleaves.models.Employee;
 import com.codingdojo.employeeleaves.models.Leave;
+import com.codingdojo.employeeleaves.models.User;
 import com.codingdojo.employeeleaves.services.EmployeeService;
 import com.codingdojo.employeeleaves.services.LeaveService;
+import com.codingdojo.employeeleaves.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -27,40 +28,77 @@ public class LeaveController {
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private UserService userService;
+
 	// *****View all leaves for employee******
 	@GetMapping("/leaves/{id}")
 	public String employeeDashboard(@PathVariable("id") Long id, HttpSession session, Model model) {
 
-		model.addAttribute("leaves", leaveService.getLeavesByEmployeeId(id)); // get all leaves for employee by id
-		model.addAttribute("employee", employeeService.findEmployee(id)); // get employee name
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			model.addAttribute("leaves", leaveService.getLeavesByEmployeeId(id)); // get all leaves for employee by id
+			model.addAttribute("employee", employeeService.findEmployee(id)); // get employee name
+			
+			User currentUser = userService.findUser(userId);
+			model.addAttribute("user", currentUser);
 
-		return "employeeWithAllLeaves.jsp";
+			return "employeeWithAllLeaves.jsp";
+		}
 	}
-	
+
 	// *****View and add annual leaves for employee******
 	@GetMapping("/leaves/annual/{id}")
 	public String viewAnnualLeave(@PathVariable("id") Long id, @ModelAttribute("newLeave") Leave leave,
 			HttpSession session, Model model) {
 
-		model.addAttribute("leaves", leaveService.getAnnualLeavesByEmployeeId(id)); // get all annual leaves for
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			model.addAttribute("leaves", leaveService.getAnnualLeavesByEmployeeId(id)); // get all annual leaves for
 
-		model.addAttribute("employee", employeeService.findEmployee(id)); // get employee name
-		session.setAttribute("tempId", id); // for employee id
-		return "employeeWithAnnualLeaves.jsp";
+			model.addAttribute("employee", employeeService.findEmployee(id)); // get employee name
+			session.setAttribute("tempId", id); // for employee id
+			
+			User currentUser = userService.findUser(userId);
+			model.addAttribute("user", currentUser);
+			
+			return "employeeWithAnnualLeaves.jsp";
+		}
 	}
 
 	@PostMapping("/leaves/annual/add")
 	public String addAnnualLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result,
 			HttpSession session, Model model) {
 
-		if (result.hasErrors()) {
-			return "employeeWithAnnualLeaves.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
 		} else {
+			if (result.hasErrors()) {
+				return "employeeWithAnnualLeaves.jsp";
+			} else {
+				// Grab the the current User from Employee
+				User currentUser = userService.findUser(userId);
 
-			leaveService.addLeave(leave); // add leave to db
+				// Check if the Current User is an ADMIN or Not!
+				if (!("ADMIN".equals(currentUser.getRole())))
+					return "redirect:/";
 
-			Long tempId = (Long) session.getAttribute("tempId"); // get employee id
-			return "redirect:/leaves/annual/" + tempId;
+				leaveService.addLeave(leave); // add leave to db
+
+				Long tempId = (Long) session.getAttribute("tempId"); // get employee id
+				return "redirect:/leaves/annual/" + tempId;
+			}
 		}
 	}
 
@@ -70,24 +108,48 @@ public class LeaveController {
 	public String viewSpecificLeave(@PathVariable("id") Long id, @ModelAttribute("newLeave") Leave leave,
 			HttpSession session, Model model) {
 
-		model.addAttribute("leaves", leaveService.getSpecificLeavesByEmployeeId(id)); // get all specific leaves for
-		model.addAttribute("employee", employeeService.findEmployee(id)); // for employee name
-		session.setAttribute("tempId", id); // for employee id
-		return "employeeWithSpecificLeaves.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			model.addAttribute("leaves", leaveService.getSpecificLeavesByEmployeeId(id)); // get all specific leaves for
+			model.addAttribute("employee", employeeService.findEmployee(id)); // for employee name
+			session.setAttribute("tempId", id); // for employee id
+			
+			User currentUser = userService.findUser(userId);
+			model.addAttribute("user", currentUser);
+			
+			return "employeeWithSpecificLeaves.jsp";
+		}
 	}
 
 	@PostMapping("/leaves/specific/add")
 	public String addSpecificLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result,
 			HttpSession session) {
 
-		if (result.hasErrors()) {
-			return "employeeWithSpecificLeaves.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
 		} else {
+			if (result.hasErrors()) {
+				return "employeeWithSpecificLeaves.jsp";
+			} else {
+				// Grab the the current User from Employee
+				User currentUser = userService.findUser(userId);
 
-			leaveService.addLeave(leave); // add leave to db
+				// Check if the Current User is an ADMIN or Not!
+				if (!("ADMIN".equals(currentUser.getRole())))
+					return "redirect:/";
 
-			Long tempId = (Long) session.getAttribute("tempId"); // get employee id
-			return "redirect:/leaves/specific/" + tempId;
+				leaveService.addLeave(leave); // add leave to db
+
+				Long tempId = (Long) session.getAttribute("tempId"); // get employee id
+				return "redirect:/leaves/specific/" + tempId;
+			}
 		}
 	}
 
@@ -96,24 +158,51 @@ public class LeaveController {
 	public String viewSickLeave(@PathVariable("id") Long id, @ModelAttribute("newLeave") Leave leave,
 			HttpSession session, Model model) {
 
-		model.addAttribute("leaves", leaveService.getSickLeavesByEmployeeId(id)); // get all sick leaves for employee by id
-		model.addAttribute("employee", employeeService.findEmployee(id)); // for employee name
-		session.setAttribute("tempId", id); // for employee id
-		return "employeeWithSickLeaves.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			model.addAttribute("leaves", leaveService.getSickLeavesByEmployeeId(id)); // get all sick leaves for
+																						// employee by
+																						// id
+			model.addAttribute("employee", employeeService.findEmployee(id)); // for employee name
+			session.setAttribute("tempId", id); // for employee id
+			
+			User currentUser = userService.findUser(userId);
+			model.addAttribute("user", currentUser);
+			
+			return "employeeWithSickLeaves.jsp";
+		}
 	}
 
 	@PostMapping("/leaves/sick/add")
 	public String addSickLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result,
 			HttpSession session) {
 
-		if (result.hasErrors()) {
-			return "employeeWithSickLeaves.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
 		} else {
+			if (result.hasErrors()) {
+				return "employeeWithSickLeaves.jsp";
+			} else {
 
-			leaveService.addLeave(leave); // add leave to db
+				// Grab the the current User from Employee
+				User currentUser = userService.findUser(userId);
 
-			Long tempId = (Long) session.getAttribute("tempId"); // get employee id
-			return "redirect:/leaves/sick/" + tempId;
+				// Check if the Current User is an ADMIN or Not!
+				if (!("ADMIN".equals(currentUser.getRole())))
+					return "redirect:/";
+
+				leaveService.addLeave(leave); // add leave to db
+
+				Long tempId = (Long) session.getAttribute("tempId"); // get employee id
+				return "redirect:/leaves/sick/" + tempId;
+			}
 		}
 	}
 
@@ -121,8 +210,23 @@ public class LeaveController {
 	@DeleteMapping("/leave/{id}/delete")
 	public String deleteLeave(@PathVariable("id") Long id, HttpSession session) {
 
-		Leave leave = leaveService.findById(id);
-		leaveService.deleteLeave(leave);
-		return "redirect:/employees/" + leave.getEmployee().getId();
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			
+			// Grab the the current User from Employee
+			User currentUser = userService.findUser(userId);
+
+			// Check if the Current User is an ADMIN or Not!
+			if (!("ADMIN".equals(currentUser.getRole())))
+				return "redirect:/";
+			
+			Leave leave = leaveService.findById(id);
+			leaveService.deleteLeave(leave);
+			return "redirect:/employees/" + leave.getEmployee().getId();
+		}
 	}
 }

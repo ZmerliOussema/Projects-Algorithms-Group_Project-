@@ -35,7 +35,7 @@
 					style="color: #ffffffc5;">إضافة عون</a>
 			</div>
 			<div>
-				<h5 class="text" style="color: #ffffffc5;">${user.firstName}
+				<h5 class="text" style="color: #ffffffc5;">${user.firstNameAr} ${user.lastNameAr}
 					:المستخدم</h5>
 			</div>
 		</nav>
@@ -86,7 +86,7 @@
 						<td class="table-active"><a href="/leaves/${ownerId}">${combinedLeaves[ownerId].firstName}
 								${combinedLeaves[ownerId].lastName}</a>
 								
-								<form action="/lemployees/${ownerId}/delete" method="post">
+								<form action="/employees/${ownerId}" method="post">
 								<input type="hidden" name="_method" value="DELETE"> 
 								<input type="submit" value="delete" class="btn btn-danger">
 							</form>

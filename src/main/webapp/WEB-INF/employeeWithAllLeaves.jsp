@@ -61,7 +61,7 @@
 
 			</div>
 			<div>
-				<h4 class="text" style="color: #ffffffc5;">${user.firstNameAr} 
+				<h4 class="text" style="color: #ffffffc5;">${user.firstNameAr} ${user.lastNameAr}
 					:المستخدم</h4>
 			</div>
 		</nav>
@@ -144,7 +144,7 @@
 										value="${leave.endDate}" pattern="yyyy-MM-dd" /></td>
 								<td class="text-end"><fmt:formatDate
 										value="${leave.startDate}" pattern="yyyy-MM-dd" /> <c:if
-										test="${user.role == 'admin'}">
+										test="${user.role == 'ADMIN'}">
 										<form action="/leave/${leave.id}/delete" method="post">
 											<input type="hidden" name="_method" value="delete"> <input
 												type="submit" value="delete" class="btn btn-danger">

@@ -77,8 +77,8 @@ function calculateSick() {
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
 			</div>
 			<div>
-				<h4 class="text" style="color: #ffffffc5;">${user.firstName}
-					:المستخدم</h4>
+				<h4 class="text" style="color: #ffffffc5;">${user.firstNameAr}
+					${user.lastNameAr} :المستخدم</h4>
 			</div>
 		</nav>
 		<div
@@ -161,30 +161,34 @@ function calculateSick() {
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>
-				<form:form action="/leaves/sick/add" method="post"
-					modelAttribute="newLeave">
-					<tr>
-						<div class="d-flex justify-content-center align-items-center">
-							<td>
-								<button type="submit" class="btn btn-primary fw-bold"
-									style="width: 200px; background-color: #5b96c7ef; color: #161615;">Add
-									- إضافة</button>
-							</td>
-							<td><form:input path="sick" type="number"
-									class="form-control text-center" name="sick" id="sick"
-									value="0" style="background-color: #ebca6eaf;" /></td>
-							<td><form:input path="endDate" type="date"
-									class="form-control" name="endDate" id="endDate"
-									onchange="calculateSick()" style="background-color: #ebca6eaf;" /></td>
-							<td><form:input path="startDate" type="date"
-									class="form-control" name="startDate" id="startDate"
-									onchange="calculateSick()" style="background-color: #ebca6eaf;" /></td>
-							<form:errors path="employee" class="error" />
-							<form:input type="hidden" path="employee" value="${employee.id}"
-								class="form-control" />
-						</div>
-					</tr>
-				</form:form>
+				<c:if test="${'ADMIN' eq user.role}">
+					<form:form action="/leaves/sick/add" method="post"
+						modelAttribute="newLeave">
+						<tr>
+							<div class="d-flex justify-content-center align-items-center">
+								<td>
+									<button type="submit" class="btn btn-primary fw-bold"
+										style="width: 200px; background-color: #5b96c7ef; color: #161615;">Add
+										- إضافة</button>
+								</td>
+								<td><form:input path="sick" type="number"
+										class="form-control text-center" name="sick" id="sick"
+										value="0" style="background-color: #ebca6eaf;" /></td>
+								<td><form:input path="endDate" type="date"
+										class="form-control" name="endDate" id="endDate"
+										onchange="calculateSick()"
+										style="background-color: #ebca6eaf;" /></td>
+								<td><form:input path="startDate" type="date"
+										class="form-control" name="startDate" id="startDate"
+										onchange="calculateSick()"
+										style="background-color: #ebca6eaf;" /></td>
+								<form:errors path="employee" class="error" />
+								<form:input type="hidden" path="employee" value="${employee.id}"
+									class="form-control" />
+							</div>
+						</tr>
+					</form:form>
+				</c:if>
 			</tbody>
 		</table>
 	</div>

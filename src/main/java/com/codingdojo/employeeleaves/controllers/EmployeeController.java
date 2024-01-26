@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.codingdojo.employeeleaves.models.Employee;
 import com.codingdojo.employeeleaves.models.Leave;
+import com.codingdojo.employeeleaves.models.LoginUser;
 import com.codingdojo.employeeleaves.models.User;
 import com.codingdojo.employeeleaves.services.EmployeeService;
 import com.codingdojo.employeeleaves.services.LeaveService;
@@ -30,16 +31,30 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
-	
+
 	@Autowired
 	private LeaveService leaveService;
-	
+
 	@Autowired
 	private UserService userService;
-	
-	//*****View all leaves for admin******		
-		@GetMapping("/dashboard")
-		public String adminDashboard(HttpSession session, Model model, Leave leave) {
+
+	// ***** View all leaves for admin ******
+	@GetMapping("/dashboard")
+	public String adminDashboard(HttpSession session, Model model, Leave leave) {
+
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+
+			// Grab the the current User from Employee
+			User currentUser = userService.findUser(userId);
+
+			// Check if the Current User is an ADMIN or Not!
+			if (!("ADMIN".equals(currentUser.getRole())))
+				return "redirect:/";
 
 			List<Leave> leaves = leaveService.all(); // get all leaves
 			Map<Long, Map<String, Object>> combinedLeaves = new HashMap<>(); // create map for combined leaves
@@ -49,15 +64,22 @@ public class EmployeeController {
 				String ownerFirstName = leave1.getEmployee().getFirstNameAr(); // get owner first name
 				String ownerLastName = leave1.getEmployee().getLastNameAr(); // get owner last name
 
-				Map<String, Object> ownerData = combinedLeaves.computeIfAbsent(ownerId, k -> new HashMap<>()); // create map for owner data
+				Map<String, Object> ownerData = combinedLeaves.computeIfAbsent(ownerId, k -> new HashMap<>()); // create
+																												// map
+																												// for
+																												// owner
+																												// data
 				ownerData.put("firstName", ownerFirstName); // add owner first name to map
 				ownerData.put("lastName", ownerLastName); // add owner last name to map
-				ownerData.put("annual", (int) ownerData.getOrDefault("annual", 0) + leave1.getAnnual()); // add annual leave
+				ownerData.put("annual", (int) ownerData.getOrDefault("annual", 0) + leave1.getAnnual()); // add annual
+																											// leave
 																											// to map
 				ownerData.put("specificLeave",
-						(int) ownerData.getOrDefault("specificLeave", 0) + leave1.getSpecificLeave()); // add specific leave
+						(int) ownerData.getOrDefault("specificLeave", 0) + leave1.getSpecificLeave()); // add specific
+																										// leave
 																										// to map
-				ownerData.put("sick", (int) ownerData.getOrDefault("sick", 0) + leave1.getSick()); // add sick leave to map
+				ownerData.put("sick", (int) ownerData.getOrDefault("sick", 0) + leave1.getSick()); // add sick leave to
+																									// map
 			}
 
 			// Loop through all employees and include those who don't have leaves
@@ -77,79 +99,154 @@ public class EmployeeController {
 			}
 
 			model.addAttribute("combinedLeaves", combinedLeaves); // add combined leaves to model
-
-//			model.addAttribute("user", employeeService.findById(loggedInUserId));
 			model.addAttribute("employees", allEmployees);
+			model.addAttribute("user", currentUser);
 			return "dashboard.jsp";
 		}
+	}
 
 	// Display Route: Show add-Employee Form
 	@GetMapping("/employees/new")
 	public String employeeForm(@ModelAttribute("employee") Employee employee, HttpSession session) {
 
-		return "createEmployeeForm.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			// Grab the the current User from Employee
+			User currentUser = userService.findUser(userId);
 
+			// Check if the Current User is an ADMIN or Not!
+			if (!("ADMIN".equals(currentUser.getRole())))
+				return "redirect:/";
+			return "createEmployeeForm.jsp";
+		}
 	}
 
 	// Action Route: Create an Employee
 	@PostMapping("/employees")
 	public String createEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result,
-			HttpSession session) {
+			HttpSession session, Model model) {
 
-		if (result.hasErrors()) {
-			return "createEmployeeForm.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
 		} else {
-			
-			// Save Employee in DB
-	        Employee newEmployee = employeeService.createEmployee(employee);
+			// Grab the the current User from Employee
+			User currentUser = userService.findUser(userId);
 
-	        // Create a corresponding User with role "USER"
-	        User newUser = new User();
-	        newUser.setEmail(newEmployee.getEmail());
-	        newUser.setPassword(newEmployee.getPassword());
-	        newUser.setConfirmPW(newEmployee.getConfirmPassword());
-	        newUser.setRole("USER");
-	        newUser.setEmployee(newEmployee);
+			// Check if the Current User is an ADMIN or Not!
+			if (!("ADMIN".equals(currentUser.getRole())))
+				return "redirect:/";
 
-	        // Save the User in DB
-	        userService.register(newUser, result);
+			// Create a corresponding User with role "USER"
+			User newUser = new User();
+			newUser.setEmail(employee.getEmail());
+			newUser.setPassword(employee.getPassword());
+			newUser.setConfirmPW(employee.getConfirmPassword());
+			newUser.setRole("USER");
+			// Save the User in DB
+			userService.createUser(newUser, result);
 
-			return "redirect:/dashboard";
+			if (result.hasErrors()) {
+				// re-render the page
+				return "createEmployeeForm.jsp";
+			} else {
+				employee.setUser(newUser);
+				// Save the Employee in DB
+				employeeService.createEmployee(employee);
+				return "redirect:/dashboard";
+			}
 		}
-
 	}
 
 	// Get Employee By Id
 	@GetMapping("/employees/{id}")
 	public String getEmployeeById(Model model, @PathVariable("id") Long id, HttpSession session) {
 
-		Employee employee = employeeService.findEmployee(id);
-		model.addAttribute("employee", employee);
-		return "employeeDetails.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			Employee employee = employeeService.findEmployee(id);
+			model.addAttribute("employee", employee);
+			return "employeeDetails.jsp";
+		}
 	}
 
 	// Display Route: Show Edit Form for Employee
 	@GetMapping("/employees/{id}/edit")
-	public String updateEmployee(@PathVariable("id") Long id, Model model, @ModelAttribute("book") Employee employee) {
+	public String updateEmployee(@PathVariable("id") Long id, Model model, @ModelAttribute("employee") Employee employee,
+			HttpSession session) {
 
-		Employee foundedEmployee = employeeService.findEmployee(id);
-		model.addAttribute("employee", foundedEmployee);
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			// Grab the the current User from Employee
+			User currentUser = userService.findUser(userId);
 
-		return "editEmployeeForm.jsp";
+			// Check if the Current User is an ADMIN or Not!
+			if (!("ADMIN".equals(currentUser.getRole())))
+				return "redirect:/";
+			Employee foundedEmployee = employeeService.findEmployee(id);
+			model.addAttribute("employee", foundedEmployee);
+
+			return "editEmployeeForm.jsp";
+		}
 	}
 
 	// Action Route: Edit Employee
 	@PutMapping("/employees/{id}")
-	public String updateBook(@Valid @ModelAttribute("employee") Employee employee, BindingResult result,
+	public String updateEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result,
 			HttpSession session) {
 
-		if (result.hasErrors()) {
-			return "editEmployeeForm.jsp";
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
 		} else {
+			// Grab the the current User from Employee
+			User currentUser = userService.findUser(userId);
 
-			employeeService.updateEmployee(employee);
+			// Check if the Current User is an ADMIN or Not!
+			if (!("ADMIN".equals(currentUser.getRole())))
+				return "redirect:/";
+			if (result.hasErrors()) {
+				return "editEmployeeForm.jsp";
+			} else {
+				
+				
+				employeeService.updateEmployee(employee);
+				return "redirect:/dashboard";
+			}
+		}
+	}
 
-			return "redirect:/dashboard";
+	// Display Route: Show Update Password
+	@GetMapping("/employees/{id}/changePW")
+	public String updatePW(@PathVariable("id") Long id, Model model, @ModelAttribute("user") User user,
+			HttpSession session) {
+
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			User foundedUser = userService.findUser(id);
+			model.addAttribute("user", foundedUser);
+
+			return "editPassword.jsp";
 		}
 	}
 
@@ -157,8 +254,21 @@ public class EmployeeController {
 	@DeleteMapping("/employees/{id}")
 	public String deleteEmployee(@PathVariable("id") Long id, HttpSession session) {
 
-		employeeService.deleteEmployee(id);
+		// Grab the user id from session
+		Long userId = (Long) session.getAttribute("user_id");
+		// Route Guard
+		if (userId == null) {
+			return "redirect:/";
+		} else {
+			// Grab the the current User from Employee
+			User currentUser = userService.findUser(userId);
 
-		return "redirect:/dashboard";
+			// Check if the Current User is an ADMIN or Not!
+			if (!("ADMIN".equals(currentUser.getRole())))
+				return "redirect:/";
+			employeeService.deleteEmployee(id);
+
+			return "redirect:/dashboard";
+		}
 	}
 }

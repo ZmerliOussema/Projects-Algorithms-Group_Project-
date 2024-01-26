@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page isErrorPage="true"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
@@ -16,7 +16,8 @@
 	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
@@ -63,7 +64,7 @@ function calculateSpecificLeave() {
 	<div class="container my-3 border border-primary"
 		style="width: 1000px; background-color: #DAA520;">
 		<nav class="d-flex justify-content-between mt-3">
-			
+
 			<div class="d-flex justify-content-between align-items-center"
 				style="width: 25%;">
 				<a href="/logout" class="btn btn-primary fw-bold"
@@ -76,7 +77,8 @@ function calculateSpecificLeave() {
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
 			</div>
 			<div>
-				<h4 class="text" style="color: #ffffffc5;">${user.firstName} :المستخدم</h4>
+				<h4 class="text" style="color: #ffffffc5;">${user.firstNameAr}
+					${user.lastNameAr} :المستخدم</h4>
 			</div>
 		</nav>
 		<div
@@ -87,12 +89,11 @@ function calculateSpecificLeave() {
 					<select class="form-select" style="width: 100px; height: 35px;"
 						name="year" id="year" onchange="filterLeavesByYear()">
 						<option value="2024" selected>2024</option>
-						<option value="2023" >2023</option>
+						<option value="2023">2023</option>
 					</select>
 				</form>
 				<h3 class="text text-center text-dark fw-semibold">
-					العطل الإستثنائية الخاصة ب <a
-						href="/employees/${employee.id }"
+					العطل الإستثنائية الخاصة ب <a href="/employees/${employee.id }"
 						class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
 						${employee.firstNameAr} ${employee.lastNameAr}</a> لسنة
 				</h3>
@@ -142,26 +143,35 @@ function calculateSpecificLeave() {
 					</tr>
 				</c:forEach>
 				</tr>
-				<form:form action="/leaves/specific/add" method="post" modelAttribute="newLeave">
-					<tr>
-						<div class="d-flex justify-content-center align-items-center">
-							<td>
-								<button type="submit" class="btn btn-primary fw-bold"
-									style="width: 200px; background-color: #5b96c7ef; color: #161615;">Add
-									- إضافة</button>
-							</td>
- 						<td><form:input path="specificLeave" type="number" class="form-control text-center" name="specificLeave" id="specificLeave" value="0" style="background-color: #ebca6eaf;" /></td>
-						<td><form:input path="endDate" type="date" class="form-control"
-									name="endDate" id="endDate" onchange="calculateSpecificLeave()"
-									style="background-color: #ebca6eaf;" /></td>
-							<td><form:input path="startDate" type="date" class="form-control"
-								name="startDate" id="startDate" onchange="calculateSpecificLeave()"
-								style="background-color: #ebca6eaf;" /></td>
-								     <form:errors path="employee" class="error"/>
-							<form:input type="hidden" path="employee" value="${employee.id}" class="form-control"/>
-						</div>
-					</tr>
-				</form:form>
+				<c:if test="${'ADMIN' eq user.role}">
+					<form:form action="/leaves/specific/add" method="post"
+						modelAttribute="newLeave">
+						<tr>
+							<div class="d-flex justify-content-center align-items-center">
+								<td>
+									<button type="submit" class="btn btn-primary fw-bold"
+										style="width: 200px; background-color: #5b96c7ef; color: #161615;">Add
+										- إضافة</button>
+								</td>
+								<td><form:input path="specificLeave" type="number"
+										class="form-control text-center" name="specificLeave"
+										id="specificLeave" value="0"
+										style="background-color: #ebca6eaf;" /></td>
+								<td><form:input path="endDate" type="date"
+										class="form-control" name="endDate" id="endDate"
+										onchange="calculateSpecificLeave()"
+										style="background-color: #ebca6eaf;" /></td>
+								<td><form:input path="startDate" type="date"
+										class="form-control" name="startDate" id="startDate"
+										onchange="calculateSpecificLeave()"
+										style="background-color: #ebca6eaf;" /></td>
+								<form:errors path="employee" class="error" />
+								<form:input type="hidden" path="employee" value="${employee.id}"
+									class="form-control" />
+							</div>
+						</tr>
+					</form:form>
+				</c:if>
 			</tbody>
 		</table>
 	</div>
