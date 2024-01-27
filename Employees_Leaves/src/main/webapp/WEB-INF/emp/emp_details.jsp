@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- New line below to use the JSP Standard Tag Library -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -28,56 +28,66 @@
 		style="width: 1000px; background-color: #DAA520;">
 		<nav class="d-flex justify-content-between mt-3">
 			<div class="d-flex justify-content-between align-items-center"
-				style="width: 20%;">
+				style="width: 23%;">
 				<a href="/admin_dashboard"><i
 					class='fa fa-home w3-xlarge btn btn-primary fw-bold'
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
-				<a href="/employees/ch_password/1"
-					class="link-underline-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-					style="color: #ffffffc5;">تغيير كلمة العبور</a> <a
-					href="/employees/edit/1"
-					class="link-underline-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-					style="color: #ffffffc5;">تحيين</a>
+						<c:if test="${user.role == 'admin' }">
+									<a href="/employees/ch_password/${employee.id}" class="btn btn-primary fw-bold ms-1 me-1"
+					style="width: 70%; background-color: #5b96c7ef; color: #ffffffc5;">تغيير كلمة العبور</a>
+					<a href="/employees/edit/${employee.id}" class="btn btn-primary fw-bold  me-1"
+					style="width: 30%; background-color: #5b96c7ef; color: #ffffffc5;">تحيين</a>
+							</c:if>
 			</div>
 			<div>
-				<h4 class="text" style="color: #ffffffc5;">Admin :المستخدم</h4>
+				<h4 class="text" style="color: #ffffffc5;">${user.firstName} :المستخدم</h4>
 			</div>
 		</nav>
 		<div class="d-flex justify-content-center align-items-center grid gap-3 mt-5">
 			<h3 class="text text-center text-dark fw-semibold">المعطيات
-				الخاصة ب نزار الجويني</h3>
+				الخاصة بـ ${employee.firstNameAr } ${employee.lastNameAr }</h3>
 		</div>
 		<div
 			class="d-flex justify-content-end align-items-center grid gap-3 mt-3">
 			<h6 class="text text-dark text-center fw-medium">للتثبت من
 				المعلومات الرجاء الإتصال بمصلحة الموارد البشرية *</h6>
 		</div>
-		<fieldset class="border border-dark">
-			<legend class="float-none w-auto text text-end">الإتصال</legend>
-			<div class="d-flex flex-column justify-content-center">
-				<div class="d-flex justify-content-between align-items-center mx-5">
-					<h6 class="text fw-medium">nizar@gmail.com : البريد
-						الالكتروني</h6>
-					<h6 class="text fw-medium">98 111 111 : رقم الهاتف</h6>
-				</div>
-				<div class="d-flex justify-content-end align-items-center mx-5">
-					<h6 class="text fw-medium">العنوان : تونس -- تونس</h6>
-				</div>
-			</div>
-		</fieldset>
-		<fieldset class="border border-dark mt-5 mb-3">
-			<legend class="float-none w-auto text text-end">معطيات شخصية</legend>
-			<div class="d-flex flex-column justify-content-center">
-				<div class="d-flex justify-content-between align-items-center mx-5">
-					<h6 class="text fw-medium">الخطة : مساعد تطبيق و بحث أول فوق الرتبة</h6>
-					<h6 class="text fw-medium">الإسم و اللقب : نزار الجويني</h6>
-				</div>
-				<div class="d-flex flex-column align-items-end mx-5">
-					<h6 class="text fw-medium">الصنف : فني</h6>
-					<h6 class="text fw-medium">الرتبة : أ2</h6>
-				</div>
-			</div>
-		</fieldset>
+<fieldset class="border border-dark">
+    <legend class="float-none w-auto text text-end"> Contact / الإتصال</legend>    
+        <div class="d-flex justify-content-between">
+        <div class="text text-start">
+           <h6 class="text fw-medium text-start"> Email: ${employee.email}</h6>
+           <h6 class="text fw-medium text-start">Phone Number: ${employee.phoneNumber}</h6>
+            <h6 class="text fw-medium text-start"> Address: ${employee.address}</h6>
+           
+        </div>
+        <div class=" text text-end">
+            <h6 class="text fw-medium text-end"> ${employee.email} : البريد الالكتروني </h6>
+            <h6 class="text fw-medium text-end">رقم الهاتف : ${employee.phoneNumber} </h6>
+            <h6 class="text fw-medium text-end">العنوان : ${employee.addressAr}</h6>
+           
+        </div>
+    </div>
+</fieldset>
+
+<fieldset class="border border-dark mt-5 mb-3">
+    <legend class="float-none w-auto text text-end">Personal Information / معطيات شخصية  </legend>
+    <div class="d-flex justify-content-between">
+        <div class="text text-start">
+           <h6 class="text fw-medium text-start"> Name: ${employee.firstName} ${employee.lastName}</h6>
+           <h6 class="text fw-medium text-start">Title: ${employee.title}</h6>
+            <h6 class="text fw-medium text-start"> Category: ${employee.category}</h6>
+            <h6 class="text fw-medium text-start">Range: ${employee.rangeEmployee}</h6>
+        </div>
+        <div class=" text text-end">
+            <h6 class="text fw-medium text-end">الإسم و اللقب : ${employee.firstNameAr} ${employee.lastNameAr} </h6>
+            <h6 class="text fw-medium text-end">الخطة : ${employee.titleAr} </h6>
+            <h6 class="text fw-medium text-end">الصنف : ${employee.categoryAr}</h6>
+            <h6 class="text fw-medium text-end">الرتبة : ${employee.rangeAr} </h6>
+        </div>
+    </div>
+</fieldset>
+
 	</div>
 </body>
-</html> --%>
+</html>

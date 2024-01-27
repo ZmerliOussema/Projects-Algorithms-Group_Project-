@@ -94,7 +94,7 @@ function calculateAnnual() {
 					العطل السنوية الخاصة ب <a
 						href="/employees/show/1"
 						class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
-						 ${employee.firstName} ${employee.lastName}</a> لسنة
+						 ${employee.firstNameAr } ${employee.lastNameAr }</a> لسنة
 				</h3>
 			</div>
 			<div
@@ -134,9 +134,9 @@ function calculateAnnual() {
 						data-end-date="${leave.end_date}">
 						<td>${remainingAnnual}</td>
 						<td>${leave.annual}</td>
-						<td class="table-active text-end"><fmt:formatDate
+						<td class="table-active text-end text-center"><fmt:formatDate
 								value="${leave.end_date}" pattern="yyyy-MM-dd" /></td>
-						<td class="text-end"><fmt:formatDate
+						<td class="text-end text-center"><fmt:formatDate
 								value="${leave.start_date}" pattern="yyyy-MM-dd" /></td>
 					</tr>
 				</c:forEach>
@@ -159,6 +159,7 @@ function calculateAnnual() {
 								style="background-color: #ebca6eaf;" /></td>
 								     <form:errors path="owner" class="error"/>
 							<form:input type="hidden" path="owner" value="${employee.id}" class="form-control"/>
+							<form:input  type="hidden"  class="form-control"  path="status" value="Approved"/>
 						</div> 
 					</tr> 
 					

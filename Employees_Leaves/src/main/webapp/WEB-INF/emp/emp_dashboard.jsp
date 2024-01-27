@@ -51,14 +51,18 @@
 		style="width: 1000px; background-color: #DAA520;">
 		<nav class="d-flex justify-content-between mt-3">
 			<div class="d-flex justify-content-between align-items-center"
-				style="width: 17%;">
+				style="width: 29%;"> 
 				<a href="/logout" class="btn btn-primary fw-bold"
-					style="width: 100px; background-color: #5b96c7ef; color: #ffffffc5;">خروج</a>
-
+					style="width: 25%; background-color: #5b96c7ef; color: #ffffffc5;">خروج</a>
+							<c:if test="${user.role != 'admin' }">
+									<a href="/requestLeave/${user.id}" class="btn btn-primary fw-bold ms-1 me-1"
+					style="width: 50%; background-color: #5b96c7ef; color: #ffffffc5;">طلب عطلة</a>
+					<a href="/leavestatus/${user.id}" class="btn btn-primary fw-bold  me-1"
+					style="width: 50%; background-color: #5b96c7ef; color: #ffffffc5;">حالة العطل</a>
+							</c:if>
 				<a href="/admin_dashboard"><i
-					class='fa fa-home w3-xlarge btn btn-primary fw-bold'
+					class='fa fa-home w3-xlarge btn btn-primary fw-bold '
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
-
 			</div>
 			<div>
 				<h4 class="text" style="color: #ffffffc5;">${user.firstName}
@@ -76,8 +80,7 @@
 			</form>
 			<h3 class="text text-center text-dark fw-semibold">
 				العطل الخاصة ب <a href="/employees/show/${employee.id}"
-					class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-dark">${employee.firstName}
-					${employee.lastName}</a> لسنة
+					class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-dark">${employee.firstNameAr } ${employee.lastNameAr }</a> لسنة
 			</h3>
 		</div>
 		<div class="d-flex justify-content-end mt-3">
@@ -142,14 +145,14 @@
 								<td class="table-active">${leave.specificLeave == 0 ? '-' : leave.specificLeave}</td>
 								<td>${leave.annual == 0 ? '-' : remainingAnnual}</td>
 								<td>${leave.annual == 0 ? '-' : leave.annual}</td>
-								<td class="table-active text-end"><fmt:formatDate
+								<td class="table-active text-end text-center"><fmt:formatDate
 										value="${leave.end_date}" pattern="yyyy-MM-dd" /></td>
-								<td class="text-end"><fmt:formatDate
+								<td class="text-end text-center d-flex justify-content-end align-items-center"><fmt:formatDate
 										value="${leave.start_date}" pattern="yyyy-MM-dd" /> <c:if
 										test="${user.role == 'admin'}">
 										<form action="/leave/${leave.id}/delete" method="post">
-											<input type="hidden" name="_method" value="delete"> <input
-												type="submit" value="delete" class="btn btn-danger">
+											<input type="hidden" name="_method" value="delete">					
+											<button type="submit" class="btn btn-danger ms-4"><i class="fa fa-solid fa-trash"></i></button>
 										</form>
 									</c:if></td>
 							</tr>

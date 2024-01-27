@@ -95,7 +95,7 @@ function calculateSick() {
 				<h3 class="text text-center text-dark fw-semibold">
 					العطل المرضية الخاصة ب <a href="/employees/show/1"
 						class="link-underline-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
-						${employee.firstName} ${employee.lastName}</a> لسنة
+						${employee.firstNameAr } ${employee.lastNameAr }</a> لسنة
 				</h3>
 			</div>
 			<div
@@ -128,41 +128,22 @@ function calculateSick() {
 			<tbody class="table-group-divider">
 				<c:set var="remainingSick" value="60" />
 
-				<c:choose>
-					<c:when test="${empty leaves}">
-						<tr>
-							<td colspan="8">No sick leave information available for this
-								employee.</td>
-						</tr>
-					</c:when>
-					<c:otherwise>
-						<c:forEach var="leave" items="${leaves}">
-							<c:choose>
-								<c:when test="${leave.sick == 0}">
-									<tr>
-										<td colspan="8">tetststdtsdgsdg.</td>
-									</tr>
-								</c:when>
-								<c:otherwise>
-									<c:set var="remainingSick"
-										value="${remainingSick - leave.sick}" />
-									<tr class="border-bottom border-dark-subtle leave-row"
-										data-start-date="${leave.start_date}"
-										data-end-date="${leave.end_date}">
-										<td>${remainingSick}</td>
-										<td>${leave.sick}</td>
-										<td class="table-active text-end"><fmt:formatDate
-												value="${leave.end_date}" pattern="yyyy-MM-dd" /></td>
-										<td class="text-end"><fmt:formatDate
-												value="${leave.start_date}" pattern="yyyy-MM-dd" /></td>
-									</tr>
-								</c:otherwise>
-							</c:choose>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
 
+				<c:forEach var="leave" items="${leaves}">
 
+					<c:set var="remainingSick" value="${remainingSick - leave.sick}" />
+					<tr class="border-bottom border-dark-subtle leave-row"
+						data-start-date="${leave.start_date}"
+						data-end-date="${leave.end_date}">
+						<td>${remainingSick}</td>
+						<td>${leave.sick}</td>
+						<td class="table-active text-end text-center"><fmt:formatDate
+								value="${leave.end_date}" pattern="yyyy-MM-dd" /></td>
+						<td class="text-end text-center"><fmt:formatDate
+								value="${leave.start_date}" pattern="yyyy-MM-dd" /></td>
+					</tr>
+
+				</c:forEach>
 
 
 				<c:if test="${user.role == 'admin'}">
@@ -189,6 +170,7 @@ function calculateSick() {
 								<form:errors path="owner" class="error" />
 								<form:input type="hidden" path="owner" value="${employee.id}"
 									class="form-control" />
+									<form:input  type="hidden"  class="form-control"  path="status" value="Approved"/>
 							</div>
 						</tr>
 					</form:form>
