@@ -31,10 +31,13 @@ public class LeaveController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private HttpSession session;
 
 //*****View all leaves for admin******		
 	@GetMapping("/admin_dashboard")
-	public String adminDashboard(HttpSession session, Model model, Leave leave) {
+	public String adminDashboard(Model model, Leave leave) {
 
 	    // Verify admin and normal user
 	    Long loggedInUserId = (Long) session.getAttribute("employeeId");
@@ -85,10 +88,11 @@ public class LeaveController {
 	    return "admin/admin_dashboard.jsp";
 	}
 
-
+	//*****View all leaves for admin******	
+	
 //*****View all leaves for employee******	
 	@GetMapping("/employees/{id}")
-	public String employeeDashboard(@PathVariable("id") Long id, HttpSession session, Model model) {
+	public String employeeDashboard(@PathVariable("id") Long id, Model model) {
 
 		  Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
@@ -114,10 +118,11 @@ public class LeaveController {
 
 	    return "emp/emp_dashboard.jsp";
 	}
-
+	//*****View all leaves for employee******
+	
 //*****View and add annual leaves for employee******
 	@GetMapping("/employees/annual/{id}")
-	public String viewAnnualLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, HttpSession session, Model model) {
+	public String viewAnnualLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, Model model) {
 	    Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
 	    if (loggedInUserId == null) {
@@ -145,8 +150,7 @@ public class LeaveController {
 	}
 
 	@PostMapping("/employees/annual/add")
-	public String addAnnualLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result,
-			HttpSession session, Model model) {
+	public String addAnnualLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result, Model model) {
 		// verification admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
@@ -163,10 +167,11 @@ public class LeaveController {
 			return "redirect:/employees/annual/" + tempId;
 		}
 	}
-
+	//*****View and add annual leaves for employee******
+	
 //*****View and add specific leaves for employee******
 	@GetMapping("/employees/specific/{id}")
-	public String viewSpecificLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, HttpSession session, Model model) {
+	public String viewSpecificLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, Model model) {
 	    Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
 	    if (loggedInUserId == null) {
@@ -213,10 +218,11 @@ public class LeaveController {
 			return "redirect:/employees/specific/" + tempId;
 		}
 	}
-
+	//*****View and add specific leaves for employee******
+	
 //*****View and add sick leaves for employee******	
 	@GetMapping("/employees/sick/{id}")
-	public String viewSickLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, HttpSession session, Model model) {
+	public String viewSickLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, Model model) {
 	    Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
 	    if (loggedInUserId == null) {
@@ -263,10 +269,11 @@ public class LeaveController {
 			return "redirect:/employees/sick/" + tempId;
 		}
 	}
-
+	//*****View and add sick leaves for employee******	
+	
 //**** delete employee for admin******
 	@DeleteMapping("/employees/{id}/delete")
-	public String deleteEmployee(@PathVariable("id") Long id, HttpSession session) {
+	public String deleteEmployee(@PathVariable("id") Long id) {
 
 		// verification admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
@@ -281,7 +288,7 @@ public class LeaveController {
 
 //**** delete leave for admin******
 	@DeleteMapping("/leave/{id}/delete")
-	public String deleteLeave(@PathVariable("id") Long id, HttpSession session) {
+	public String deleteLeave(@PathVariable("id") Long id) {
 
 		// verification admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
@@ -294,9 +301,9 @@ public class LeaveController {
 		return "redirect:/employees/" + leave.getOwner().getId();
 	}
 
-    // Employee Request Leave
+    //*****Employee Request Leave*****//
     @GetMapping("/requestLeave/{id}")
-    public String requestLeave(@PathVariable("id") Long id,Model model, HttpSession session) {
+    public String requestLeave(@PathVariable("id") Long id,Model model) {
     	
   	  Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
@@ -317,8 +324,7 @@ public class LeaveController {
     }
 
     @PostMapping("/requestLeave")
-    public String submitLeaveRequest(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result,
-                                     HttpSession session) {
+    public String submitLeaveRequest(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result) {
         Long loggedInUserId = (Long) session.getAttribute("employeeId");
         if (loggedInUserId == null) {
             return "redirect:/logout";
@@ -330,10 +336,11 @@ public class LeaveController {
         leaveService.addLeave(leave);
         return "redirect:/employees/" + loggedInUserId;
     }
-
-    // Admin View Employee Leave Requests
+    //*****Employee Request Leave*****//
+    
+    //****** Admin View Employee Leave Requests *****//
     @GetMapping("/employeeLeaveRequests")
-    public String viewEmployeeLeaveRequests(HttpSession session, Model model) {
+    public String viewEmployeeLeaveRequests(Model model) {
         Long loggedInUserId = (Long) session.getAttribute("employeeId");
         if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
             return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/access-denied";
@@ -344,9 +351,9 @@ public class LeaveController {
         return "admin/leave_requests.jsp";
     }
 
-    // Admin Approve/Deny Leave Request
+    //==> Admin Approve Leave Request
     @PostMapping("/approveLeaveRequest/{leaveId}")
-    public String approveLeaveRequest(@PathVariable("leaveId") Long leaveId, HttpSession session) {
+    public String approveLeaveRequest(@PathVariable("leaveId") Long leaveId) {
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
 			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/access-denied";
@@ -357,7 +364,7 @@ public class LeaveController {
         leaveService.update(leave);
         return "redirect:/employeeLeaveRequests";
     }
-
+    //==> Admin Deny Leave Request	
     @PostMapping("/denyLeaveRequest/{leaveId}")
     public String denyLeaveRequest(@PathVariable("leaveId") Long leaveId, HttpSession session) {
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
@@ -370,9 +377,11 @@ public class LeaveController {
         leaveService.update(leave);
         return "redirect:/employeeLeaveRequests";
     }
+  //****** Admin View Employee Leave Requests *****//
     
+    //****** Employee View their status Leave Requests *****//
     @GetMapping("/leavestatus/{id}")
-    public String leaveStatus(@PathVariable("id") Long id,Model model, HttpSession session) {
+    public String leaveStatus(@PathVariable("id") Long id,Model model) {
     	
   	  Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
@@ -392,4 +401,5 @@ public class LeaveController {
     	 model.addAttribute("leaves", leaveRequests);
         return "emp/leave_status.jsp";
     }
+  //****** Employee View their status Leave Requests *****//
 }
