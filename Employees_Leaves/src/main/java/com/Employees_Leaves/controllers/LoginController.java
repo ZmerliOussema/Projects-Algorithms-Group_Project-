@@ -1,7 +1,5 @@
 package com.Employees_Leaves.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,14 +21,16 @@ public class LoginController {
 	// Add once service is implemented:
 	@Autowired
 	private EmployeeService employeeService;
-
+	
+	@Autowired
+	private HttpSession session;
+	
+	//******** Login page ******//
 	@GetMapping("/")
-	public String index(Model model, Employee employee, HttpSession session) {
+	public String index(Model model, Employee employee) {
 		model.addAttribute("newEmployee", new Employee());
 		model.addAttribute("newLogin", new LoginEmployee());
 
-		List<Employee> allEmployees = employeeService.allEmployees();
-		model.addAttribute("employees", allEmployees);
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if(loggedInUserId != null) {
 			return "redirect:/admin_dashboard";
@@ -38,24 +38,8 @@ public class LoginController {
 		return "login.jsp";
 	}
 
-	@PostMapping("/register")
-	public String register(@Valid @ModelAttribute("newEmployee") Employee newEmployee, BindingResult result,
-			Model model, HttpSession session) {
-
-		Employee employee = employeeService.register(newEmployee, result);
-
-		if (result.hasErrors()) {
-			model.addAttribute("newLogin", new LoginEmployee());
-			return "login.jsp";
-		}
-		session.setAttribute("employeeId", employee.getId());
-
-		return "redirect:/admin_dashboard";
-	}
-
 	@PostMapping("/login")
-	public String login(@Valid @ModelAttribute("newLogin") LoginEmployee newLogin, BindingResult result, Model model,
-			HttpSession session) {
+	public String login(@Valid @ModelAttribute("newLogin") LoginEmployee newLogin, BindingResult result, Model model) {
 
 		Employee employee = employeeService.login(newLogin, result);
 
@@ -65,12 +49,43 @@ public class LoginController {
 		}
 
 		session.setAttribute("employeeId", employee.getId());
+		return "redirect:/admin_dashboard";
+	}
+	//******** Login page ******//
+	
+	//******** create admin for first time only ******//
+	@GetMapping("/create/admin")
+	public String createAdmin(Model model, Employee employee) {
+		model.addAttribute("newEmployee", new Employee());
+		model.addAttribute("newLogin", new LoginEmployee());
+
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
+	    if (loggedInUserId != null || !employeeService.allEmployees().isEmpty()) {
+	        return "redirect:/admin_dashboard";
+	    }
+		return "create_admin.jsp";
+	}
+	
+	@PostMapping("/create/admin/add")
+	public String register(@Valid @ModelAttribute("newEmployee") Employee newEmployee, BindingResult result,
+			Model model) {
+
+		Employee employee = employeeService.register(newEmployee, result);
+
+		if (result.hasErrors()) {
+			model.addAttribute("newLogin", new LoginEmployee());
+			return "create_admin.jsp";
+		}
+		session.setAttribute("employeeId", employee.getId());
 
 		return "redirect:/admin_dashboard";
 	}
-
+	//******** create admin for first time only ******//
+	
+	
+	//******** create employee ******//
 	@GetMapping("/create/employee")
-	public String viewCreateEmployee(Model model, Employee employee, HttpSession session) {
+	public String viewCreateEmployee(Model model, Employee employee) {
 		// Verify admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
@@ -84,7 +99,7 @@ public class LoginController {
 
 	@PostMapping("/create/employee")
 	public String createEmployee(@Valid @ModelAttribute("newEmployee") Employee newEmployee, BindingResult result,
-			Model model, HttpSession session) {
+			Model model) {
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
 			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/employees/" + loggedInUserId;
@@ -98,9 +113,11 @@ public class LoginController {
 
 		return "redirect:/admin_dashboard";
 	}
-
+	//******** create employee ******//
+	
+	//******** show employee ******//
 	@GetMapping("/employees/show/{id}")
-	public String viewEmployee(@PathVariable("id") Long id, Model model, Employee employee, HttpSession session) {
+	public String viewEmployee(@PathVariable("id") Long id, Model model, Employee employee) {
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
 	    if (loggedInUserId == null) {
@@ -118,10 +135,11 @@ public class LoginController {
 		model.addAttribute("employee", employeeService.findById(id)); // Get employee name
 		return "emp/emp_details.jsp";
 	}
-
+	//******** show employee ******//
+	
+	//******** edit employee ******//
 	@GetMapping("/employees/edit/{id}")
-	public String updateEmployee(@PathVariable("id") Long id, @ModelAttribute("updateEmp") Employee employee,
-			HttpSession session, Model model) {
+	public String updateEmployee(@PathVariable("id") Long id, @ModelAttribute("updateEmp") Employee employee, Model model) {
 		// Verify admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
@@ -135,32 +153,35 @@ public class LoginController {
 		return "emp/emp_update.jsp";
 	}
 
-//	@PostMapping("/employees/edit")
-//	public String editJob(@Valid @ModelAttribute("updateEmp") Employee employee, BindingResult result,
-//			HttpSession session) {
-//
-//		// Verify admin and normal user
-//		Long loggedInUserId = (Long) session.getAttribute("employeeId");
-//		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
-//			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/employees/" + loggedInUserId;
-//		}
-//		
-//		Long tempId = (Long) session.getAttribute("tempId"); // get employee id
-//
-//		if (result.hasErrors()) {
-//			return "emp/emp_update.jsp";
-//		} else {
-//
-//			Employee emp = employeeService.findById(tempId);
-//			employeeService.updateEmployee(emp);
-//			return "redirect:/employees/show/" + tempId;
-//		}
-//	}
-//
-//	@GetMapping("/logout")
-//	public String logout(HttpSession session) {
-//		session.setAttribute("employeeId", null);
-//		return "redirect:/";
-//	}
+	@PostMapping("/employees/edit/{id}")
+	public String editJob(@PathVariable("id") Long id,@Valid @ModelAttribute("updateEmp") Employee employee, BindingResult result, Model model) {
 
+		// Verify admin and normal user
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
+		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
+			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/employees/" + loggedInUserId;
+		}
+		
+		Employee user = employeeService.findById(loggedInUserId);
+		model.addAttribute("employee", employeeService.findById(id)); // Get employee name
+		model.addAttribute("user", user); // Get user name
+		
+		if (result.hasErrors()) {
+			return "emp/emp_update.jsp";
+		} else {
+
+			Employee emp = employeeService.findById(id);
+			employeeService.updateEmployee(emp);
+			return "redirect:/employees/show/" + id;
+		}
+	}
+	//******** edit employee ******//
+	
+	//******** logout ******//
+	@GetMapping("/logout")
+	public String logout() {
+		session.setAttribute("employeeId", null);
+		return "redirect:/";
+	}
+	//******** logout ******//
 }
