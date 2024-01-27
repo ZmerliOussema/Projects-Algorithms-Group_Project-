@@ -45,7 +45,7 @@
 				الخاصة بـ ${employee.firstNameAr } ${employee.lastNameAr }</h3>
 		</div>
 
-		<form:form action="/employees/edit" method="post"
+		<form:form action="/employees/edit/${employee.id}" method="post"
 			modelAttribute="updateEmp">
 			<form:input path="" type="hidden" name="id" value="{{employee.id}}" />
 			<fieldset class="border border-dark">
@@ -76,7 +76,7 @@
 						<div class="row g-3 align-items-center">
 							<div class="col-auto">
 								<form:input path="addressAr" type="text"
-									value="${employee.addressAr}" class="form-control " />
+									value="${employee.addressAr}" class="form-control " dir="rtl" />
 							</div>
 							<div class="col-auto">
 								<h6 class="text fw-medium ms-4">العنوان</h6>
