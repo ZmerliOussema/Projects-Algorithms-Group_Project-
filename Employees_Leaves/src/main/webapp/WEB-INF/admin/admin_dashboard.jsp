@@ -15,7 +15,10 @@
 	rel="stylesheet"
 	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
 	crossorigin="anonymous">
-	<script
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 	crossorigin="anonymous"></script>
@@ -27,13 +30,17 @@
 		style="width: 1000px; background-color: #DAA520;">
 		<nav class="d-flex justify-content-between mt-3">
 			<div class="d-flex justify-content-between align-items-center"
-				style="width: 20%;">
+				style="width: 30%;">
 				<a href="/logout" class="btn btn-primary fw-bold"
-					style="width: 100px; background-color: #5b96c7ef; color: #ffffffc5;">خروج</a>
-				<a href="/leaves/add_emp"
-					class="link-underline-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-					style="color: #ffffffc5;">إضافة عون</a>
+					style="width: 20%; background-color: #5b96c7ef; color: #ffffffc5;">خروج</a>
+				<a href="/create/employee" class="btn btn-primary fw-bold ms-1 me-1"
+					style="width: 30%; background-color: #5b96c7ef; color: #ffffffc5;">إضافة
+					عون</a> <a href="/employeeLeaveRequests"
+					class="btn btn-primary fw-bold"
+					style="width: 50%; background-color: #5b96c7ef; color: #ffffffc5;">جميع
+					طلبات العطل</a>
 			</div>
+
 			<div>
 				<h5 class="text" style="color: #ffffffc5;">${user.firstName}
 					:المستخدم</h5>
@@ -42,13 +49,21 @@
 		<div
 			class="d-flex justify-content-center align-items-center grid gap-3 mt-5">
 			<h3 class="text text-center text-dark fw-semibold"
-				style="color: #ffffffc5;">العطل الخاصة بالموظفين </h3>
+				style="color: #ffffffc5;">العطل الخاصة بالموظفين</h3>
 		</div>
 		<div class="d-flex justify-content-end mt-3">
 			<h6 class="text text-center text-dark fw-medium"
 				style="color: #ffffffc5;">للتثبت من المعلومات الرجاء الإتصال
 				بمصلحة الموارد البشرية *</h6>
 		</div>
+		<!-- Add search input -->
+<div class="input-group mt-3 mb-3">
+    <input type="text" class="form-control" id="searchInput">
+    <div class="input-group-prepend">
+        <span class="input-group-text">ابحث بإسم الموظف</span>
+    </div>
+</div>
+
 		<table
 			class="table table-secondary table-striped table-hover text text-center">
 			<thead>
@@ -70,33 +85,58 @@
 					<th>المجموع</th>
 				</tr>
 			</thead>
-			<tbody class="table-group-divider">
-				<c:set var="totalAnnual" value="45" />
-				<c:set var="totalSick" value="60" />
-				<c:set var="totalSpecificLeave" value="6" />
+<tbody class="table-group-divider">
+    <c:set var="totalAnnual" value="45" />
+    <c:set var="totalSick" value="60" />
+    <c:set var="totalSpecificLeave" value="6" />
 
-				<c:forEach var="ownerId" items="${combinedLeaves.keySet()}">
-					<tr>
-						<td>${totalSick - combinedLeaves[ownerId].sick}</td>
-						<td>${combinedLeaves[ownerId].sick}</td>
-						<td class="table-active">${totalSpecificLeave - combinedLeaves[ownerId].specificLeave}</td>
-						<td class="table-active">${combinedLeaves[ownerId].specificLeave}</td>
-						<td>${totalAnnual - combinedLeaves[ownerId].annual}</td>
-						<td>${combinedLeaves[ownerId].annual}</td>
-						<td class="table-active"><a href="/employees/${ownerId}">${combinedLeaves[ownerId].firstName}
-								${combinedLeaves[ownerId].lastName}</a>
-								
-								<form action="/employees/${ownerId}/delete" method="post">
-								<input type="hidden" name="_method" value="DELETE"> 
-								<input type="submit" value="delete" class="btn btn-danger">
-							</form>
-								
-								</td>
-					</tr>
-				</c:forEach>
+    <c:forEach var="ownerId" items="${combinedLeaves.keySet()}">
+        <c:if test="${ownerId != 1}">
+            <tr class="employeeRow">
+                <td>${totalSick - combinedLeaves[ownerId].sick}</td>
+                <td>${combinedLeaves[ownerId].sick}</td>
+                <td class="table-active">${totalSpecificLeave - combinedLeaves[ownerId].specificLeave}</td>
+                <td class="table-active">${combinedLeaves[ownerId].specificLeave}</td>
+                <td>${totalAnnual - combinedLeaves[ownerId].annual}</td>
+                <td>${combinedLeaves[ownerId].annual}</td>
+                <td class="table-active d-flex justify-content-end align-items-center">
+                    <a href="/employees/${ownerId}">${combinedLeaves[ownerId].firstNameAr} ${combinedLeaves[ownerId].lastNameAr}</a>
 
-			</tbody>
+                    <form action="/employees/${ownerId}/delete" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn btn-danger ms-4">
+                            <i class="fa fa-solid fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </c:if>
+    </c:forEach>
+</tbody>
+
 		</table>
 	</div>
+	<script>
+		document.getElementById('searchInput').addEventListener('keyup',
+				function() {
+					var input, filter, table, tr, td, i, txtValue;
+					input = this.value.toUpperCase();
+					table = document.getElementsByClassName("table")[0];
+					tr = table.getElementsByClassName("employeeRow");
+
+					for (i = 0; i < tr.length; i++) {
+						td = tr[i].getElementsByTagName("td")[6]; // Index 6 corresponds to the employee name cell
+						if (td) {
+							txtValue = td.textContent || td.innerText;
+							if (txtValue.toUpperCase().indexOf(input) > -1) {
+								tr[i].style.display = "";
+							} else {
+								tr[i].style.display = "none";
+							}
+						}
+					}
+				});
+	</script>
+
 </body>
 </html>
