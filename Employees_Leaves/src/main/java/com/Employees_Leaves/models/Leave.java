@@ -35,6 +35,8 @@ public class Leave {
 	private int specificLeave;
 
 	private int sick;
+	
+	private String status;
 
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -132,6 +134,14 @@ public class Leave {
 
 	public void setOwner(Employee owner) {
 		this.owner = owner;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 
