@@ -157,10 +157,10 @@ public class LoginController {
 //		}
 //	}
 //
-//	@GetMapping("/logout")
-//	public String logout(HttpSession session) {
-//		session.setAttribute("employeeId", null);
-//		return "redirect:/";
-//	}
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.setAttribute("employeeId", null);
+		return "redirect:/";
+	}
 
 }

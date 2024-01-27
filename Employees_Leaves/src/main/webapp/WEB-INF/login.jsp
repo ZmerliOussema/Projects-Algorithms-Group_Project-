@@ -88,7 +88,6 @@
 </form:form>
 </div>
 </c:if>
-
 	<div class="wrapper">
 		<form:form action="/login" method="post" modelAttribute="newLogin">
 			<h1>Login</h1>
