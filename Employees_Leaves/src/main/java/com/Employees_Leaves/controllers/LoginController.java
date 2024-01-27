@@ -1,6 +1,5 @@
 package com.Employees_Leaves.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,16 +17,17 @@ import jakarta.validation.Valid;
 
 @Controller
 public class LoginController {
-	// Add once service is implemented:
-	@Autowired
-	private EmployeeService employeeService;
-	
-	@Autowired
-	private HttpSession session;
-	
+
+	private final EmployeeService employeeService;
+	private final HttpSession session;
+	public LoginController(EmployeeService employeeService, HttpSession session) {
+		this.employeeService = employeeService;
+		this.session = session;
+	}
+
 	//******** Login page ******//
 	@GetMapping("/")
-	public String index(Model model, Employee employee) {
+	public String index(Model model) {
 		model.addAttribute("newLogin", new LoginEmployee());
 
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
@@ -38,7 +38,7 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public String login(@Valid @ModelAttribute("newLogin") LoginEmployee newLogin, BindingResult result, Model model) {
+	public String login(@Valid @ModelAttribute("newLogin") LoginEmployee newLogin, BindingResult result) {
 
 		Employee employee = employeeService.login(newLogin, result);
 
@@ -53,7 +53,7 @@ public class LoginController {
 	
 	//******** create admin for first time only ******//
 	@GetMapping("/create/admin")
-	public String createAdmin(Model model, Employee employee) {
+	public String createAdmin(Model model) {
 		model.addAttribute("newEmployee", new Employee());
 
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
@@ -64,8 +64,7 @@ public class LoginController {
 	}
 	
 	@PostMapping("/create/admin/add")
-	public String register(@Valid @ModelAttribute("newEmployee") Employee newEmployee, BindingResult result,
-			Model model) {
+	public String register(@Valid @ModelAttribute("newEmployee") Employee newEmployee, BindingResult result) {
 
 		Employee employee = employeeService.register(newEmployee, result);
 
@@ -81,7 +80,7 @@ public class LoginController {
 	
 	//******** create employee ******//
 	@GetMapping("/create/employee")
-	public String viewCreateEmployee(Model model, Employee employee) {
+	public String viewCreateEmployee(Model model) {
 		// Verify admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
@@ -94,8 +93,7 @@ public class LoginController {
 	}
 
 	@PostMapping("/create/employee")
-	public String createEmployee(@Valid @ModelAttribute("newEmployee") Employee newEmployee, BindingResult result,
-			Model model) {
+	public String createEmployee(@Valid @ModelAttribute("newEmployee") Employee newEmployee, BindingResult result) {
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
 			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/employees/" + loggedInUserId;

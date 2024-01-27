@@ -16,10 +16,13 @@ import com.Employees_Leaves.repositories.EmployeeRepository;
 @Service
 public class EmployeeService {
 	
-	@Autowired
-	private EmployeeRepository employeeRepo;
-	
-public Employee register(Employee newEmployee, BindingResult result) {
+	private final EmployeeRepository employeeRepo;
+
+	public EmployeeService(EmployeeRepository employeeRepo) {
+		this.employeeRepo = employeeRepo;
+	}
+
+	public Employee register(Employee newEmployee, BindingResult result) {
 		
 		Optional<Employee> potentialEmployee = employeeRepo.findByEmail(newEmployee.getEmail());
     	

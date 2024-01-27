@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,16 +24,16 @@ import jakarta.validation.Valid;
 @Controller
 public class LeaveController {
 
-	@Autowired
-	private LeaveService leaveService;
+	private final LeaveService leaveService;
+	private final EmployeeService employeeService;
+	private final HttpSession session;
+	public LeaveController(HttpSession session, EmployeeService employeeService, LeaveService leaveService) {
+		this.session = session;
+		this.employeeService = employeeService;
+		this.leaveService = leaveService;
+	}
 
-	@Autowired
-	private EmployeeService employeeService;
-	
-	@Autowired
-	private HttpSession session;
-
-//*****View all leaves for admin******		
+	//*****View all leaves for admin******
 	@GetMapping("/admin_dashboard")
 	public String adminDashboard(Model model, Leave leave) {
 
@@ -113,7 +111,7 @@ public class LeaveController {
 	            .collect(Collectors.toList());
 
 	    model.addAttribute("leaves", approvedLeaves); // Set approved leaves for the employee dashboard
-	    model.addAttribute("user", user); // Get user name
+	    model.addAttribute("user", user); // Get username
 	    model.addAttribute("employee", employeeService.findById(id)); // Get employee name
 
 	    return "emp/emp_dashboard.jsp";
@@ -150,7 +148,7 @@ public class LeaveController {
 	}
 
 	@PostMapping("/employees/annual/add")
-	public String addAnnualLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result, Model model) {
+	public String addAnnualLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result) {
 		// verification admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {

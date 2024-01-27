@@ -14,8 +14,11 @@ import com.Employees_Leaves.repositories.LeaveRepository;
 @Service
 public class LeaveService {
 	
-	@Autowired
-	private LeaveRepository leaveRepo;
+	private final LeaveRepository leaveRepo;
+
+	public LeaveService(LeaveRepository leaveRepo) {
+		this.leaveRepo = leaveRepo;
+	}
 
 	public List<Leave> all(){
 		return leaveRepo.findAll();
