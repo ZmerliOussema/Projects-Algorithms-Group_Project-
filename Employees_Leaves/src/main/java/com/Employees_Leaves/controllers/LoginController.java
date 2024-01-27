@@ -28,7 +28,6 @@ public class LoginController {
 	//******** Login page ******//
 	@GetMapping("/")
 	public String index(Model model, Employee employee) {
-		model.addAttribute("newEmployee", new Employee());
 		model.addAttribute("newLogin", new LoginEmployee());
 
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
@@ -44,7 +43,6 @@ public class LoginController {
 		Employee employee = employeeService.login(newLogin, result);
 
 		if (result.hasErrors() || employee == null) {
-			model.addAttribute("newEmployee", new Employee());
 			return "login.jsp";
 		}
 
@@ -57,7 +55,6 @@ public class LoginController {
 	@GetMapping("/create/admin")
 	public String createAdmin(Model model, Employee employee) {
 		model.addAttribute("newEmployee", new Employee());
-		model.addAttribute("newLogin", new LoginEmployee());
 
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 	    if (loggedInUserId != null || !employeeService.allEmployees().isEmpty()) {
@@ -73,7 +70,6 @@ public class LoginController {
 		Employee employee = employeeService.register(newEmployee, result);
 
 		if (result.hasErrors()) {
-			model.addAttribute("newLogin", new LoginEmployee());
 			return "create_admin.jsp";
 		}
 		session.setAttribute("employeeId", employee.getId());
