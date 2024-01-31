@@ -29,9 +29,9 @@
 		style="width: 1000px; background-color: #DAA520;">
 		<nav class="d-flex justify-content-between mt-3">
 
-			<div class="d-flex justify-content-between align-items-center"
+			<div class="d-flex justify-content-start align-items-center"
 				style="width: 25%;">
-				<a href="/logout" class="btn btn-primary fw-bold"
+				<a href="/logout" class="btn btn-primary fw-bold me-1"
 					style="width: 100px; background-color: #5b96c7ef; color: #ffffffc5;">خروج</a>
 				<a href="/admin_dashboard"><i
 					class='fa fa-home w3-xlarge btn btn-primary fw-bold'

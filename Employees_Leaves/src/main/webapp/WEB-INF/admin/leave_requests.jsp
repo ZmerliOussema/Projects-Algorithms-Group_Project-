@@ -18,11 +18,12 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 	crossorigin="anonymous"></script>
-<title>Admin Dashboard</title>
+<title>Leave Requests</title>
 
 </head>
 <body style="background-color: #161615;">
@@ -33,9 +34,9 @@
 				style="width: 20%;">
 				<a href="/logout" class="btn btn-primary fw-bold"
 					style="width: 100px; background-color: #5b96c7ef; color: #ffffffc5;">خروج</a>
-					<a href="/create/employee" class="btn btn-primary fw-bold ms-1 me-1"
-					style="width: 150px; background-color: #5b96c7ef; color: #ffffffc5;">إضافة عون</a>
-				<a href="/admin_dashboard"><i
+				<a href="/create/employee" class="btn btn-primary fw-bold ms-1 me-1"
+					style="width: 150px; background-color: #5b96c7ef; color: #ffffffc5;">إضافة
+					عون</a> <a href="/admin_dashboard"><i
 					class='fa fa-home w3-xlarge btn btn-primary fw-bold '
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
 			</div>
@@ -66,34 +67,37 @@
 				<c:forEach items="${leaveRequests}" var="leave">
 					<c:if test="${empty leave.status or leave.status == 'approved'}">
 						<tr>
-							<td class="d-flex justify-content-evenly table-active" >
+							<td class="d-flex justify-content-evenly table-active">
 								<form action="/approveLeaveRequest/${leave.id}" method="post">
-									<button type="submit">قبول</button>
+									<button type="submit" class="btn btn-success fw-bold"
+									style="width: 70px; color: #161615;">قبول</button>
+									
 								</form>
 								<form action="/denyLeaveRequest/${leave.id}" method="post">
-									<button type="submit">رفض</button>
+									<button type="submit" class="btn btn-danger fw-bold"
+									style="width: 70px; color: #161615;">رفض</button>
 								</form>
 							</td>
 
-        <c:choose>
-            <c:when test="${leave.specificLeave != 0}">
-                <td>استثنائية</td>
-                <td class="table-active ">${leave.specificLeave}</td>
-            </c:when>
-            <c:when test="${leave.annual !=0}">
-                <td>سنوية</td>
-                <td class="table-active ">${leave.annual}</td> 
-            </c:when>
-            <c:otherwise>
-                <td>مرضية</td>
-                <td class="table-active ">${leave.sick}</td>
-            </c:otherwise>
-        </c:choose>
-							<td><fmt:formatDate
-								value="${leave.end_date}" pattern="yyyy-MM-dd" /></td>
+							<c:choose>
+								<c:when test="${leave.specificLeave != 0}">
+									<td>استثنائية</td>
+									<td class="table-active ">${leave.specificLeave}</td>
+								</c:when>
+								<c:when test="${leave.annual !=0}">
+									<td>سنوية</td>
+									<td class="table-active ">${leave.annual}</td>
+								</c:when>
+								<c:otherwise>
+									<td>مرضية</td>
+									<td class="table-active ">${leave.sick}</td>
+								</c:otherwise>
+							</c:choose>
+							<td><fmt:formatDate value="${leave.end_date}"
+									pattern="yyyy-MM-dd" /></td>
 							<td class="table-active "><fmt:formatDate
-								value="${leave.start_date}" pattern="yyyy-MM-dd" /></td>
-							<td>${leave.owner.firstNameAr} ${leave.owner.lastNameAr}</td>
+									value="${leave.start_date}" pattern="yyyy-MM-dd" /></td>
+							<td>${leave.owner.firstNameAr}${leave.owner.lastNameAr}</td>
 						</tr>
 					</c:if>
 				</c:forEach>

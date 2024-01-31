@@ -50,7 +50,7 @@
 	<div class="container my-3 border border-primary"
 		style="width: 1000px; background-color: #DAA520;">
 		<nav class="d-flex justify-content-between mt-3">
-			<div class="d-flex justify-content-between align-items-center"
+			<div class="d-flex justify-content-start align-items-center"
 				style="width: 31%;">
 				<a href="/logout" class="btn btn-primary fw-bold me-1"
 					style="width: 25%; background-color: #5b96c7ef; color: #ffffffc5;">خروج</a>
