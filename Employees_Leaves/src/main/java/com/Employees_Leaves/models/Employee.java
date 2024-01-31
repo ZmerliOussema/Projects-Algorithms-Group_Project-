@@ -26,6 +26,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "employees")
 public class Employee {
 
+// 	MEMBER VARIABLES
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -51,14 +52,8 @@ public class Employee {
 	@Size(min = 8, max = 128, message = "Confirm Password must be between 8 and 128 characters")
 	private String confirm;
 
-	@Column(updatable = false)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date createdAt;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date updatedAt;
-	
 	private String role = "user"; // Default value is "user"
-	
+
 	@NotBlank(message = "Address is required!")
 	private String address;
 
@@ -92,23 +87,45 @@ public class Employee {
 	@NotBlank(message = "Category is required/translate")
 	private String categoryAr;
 
-	@OneToMany(mappedBy="owner", fetch=FetchType.LAZY)
-	private List<Leave> leaveLed;
-	
-	@PrePersist
-	protected void onCreate() {
-		this.createdAt = new Date();
-	}
+// 	This will not allow the createdAt column to be updated after creation	
+	@Column(updatable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date createdAt;
 
-	@PreUpdate
-	protected void onUpdate() {
-		this.updatedAt = new Date();
-	}
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date updatedAt;
 
+//	1:M	
+	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+	private List<Leave> leaves;
 
+//	Zero-args Constructor	
 	public Employee() {
 	}
 
+//	All-args Constructor
+	public Employee(String firstName, String lastName, String email, String password, String address, String title,
+			String rangeEmployee, String category, int phoneNumber, String firstNameAr, String lastNameAr,
+			String addressAr, String titleAr, String rangeAr, String categoryAr, List<Leave> leaves) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+		this.title = title;
+		this.rangeEmployee = rangeEmployee;
+		this.category = category;
+		this.phoneNumber = phoneNumber;
+		this.firstNameAr = firstNameAr;
+		this.lastNameAr = lastNameAr;
+		this.addressAr = addressAr;
+		this.titleAr = titleAr;
+		this.rangeAr = rangeAr;
+		this.categoryAr = categoryAr;
+		this.leaves = leaves;
+	}
+
+//	GETTERS & SETTERS
 	public Long getId() {
 		return id;
 	}
@@ -157,36 +174,12 @@ public class Employee {
 		this.confirm = confirm;
 	}
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
 	public String getRole() {
 		return role;
 	}
 
 	public void setRole(String role) {
 		this.role = role;
-	}
-
-	public List<Leave> getLeaveLed() {
-		return leaveLed;
-	}
-
-	public void setLeaveLed(List<Leave> leaveLed) {
-		this.leaveLed = leaveLed;
 	}
 
 	public String getAddress() {
@@ -277,6 +270,40 @@ public class Employee {
 		this.categoryAr = categoryAr;
 	}
 
+	public Date getCreatedAt() {
+		return createdAt;
+	}
 
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public List<Leave> getLeaves() {
+		return leaves;
+	}
+
+	public void setLeaves(List<Leave> leaves) {
+		this.leaves = leaves;
+	}
+
+	// Save the date before the object is created
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = new Date();
+	}
+
+	// Save the date on every update
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedAt = new Date();
+	}
 
 }

@@ -30,38 +30,41 @@ public class Leave {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date end_date;
 
-	private int annual;
+	private int annual = 0;
 
-	private int specificLeave;
+	private int specificLeave = 0;
 
-	private int sick;
-	
+	private int sick = 0;
+
 	private String status;
 
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updatedAt;
 
-	
+// 	M:1	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="employee_id")
-    private Employee owner;
-    
-	@PrePersist
-	protected void onCreate() {
-		this.createdAt = new Date();
-	}
+	@JoinColumn(name = "employee_id")
+	private Employee owner;
 
-	@PreUpdate
-	protected void onUpdate() {
-		this.updatedAt = new Date();
-	}
-
+//	ZERO ARGS CONSTRUCTOR	
 	public Leave() {
 	}
 
+// 	ALL ARGS CONSTRUCTOR 
+	public Leave(Date start_date, Date end_date, int annual, int specificLeave, int sick, String status) {
+		this.start_date = start_date;
+		this.end_date = end_date;
+		this.annual = annual;
+		this.specificLeave = specificLeave;
+		this.sick = sick;
+		this.status = status;
+	}
+
+//	GETTERS & SETTERS
 	public Long getId() {
 		return id;
 	}
@@ -93,8 +96,6 @@ public class Leave {
 	public void setAnnual(int annual) {
 		this.annual = annual;
 	}
-
-
 
 	public int getSpecificLeave() {
 		return specificLeave;
@@ -144,6 +145,16 @@ public class Leave {
 		this.status = status;
 	}
 
+	// Save the date before the object is created
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = new Date();
+	}
 
+	// Save the date on every update
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedAt = new Date();
+	}
 
 }

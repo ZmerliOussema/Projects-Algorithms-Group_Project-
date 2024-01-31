@@ -14,33 +14,29 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <link rel="stylesheet" type="text/css" href="/css/style.css">
-<title>إدارة عطل الموظفين</title>
+<title>ch_password</title>
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
-<!-- change to match your file/naming structure -->
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body style="background: #161615;">
 	<div class="wrapper">
-		<form:form action="/login" method="post" modelAttribute="newLogin">
-			<h1>Login</h1>
-			<div class="input-box">
-				<form:input path="email" type="email" placeholder="Email" />
-				<i class="bx bxs-user"></i>
-			</div>
-			<div class="errors">
-				<form:errors path="email" class="text-danger" />
-			</div>
+		<form:form action="/employees/ch_password/${thisEmployee.id}" method="post" modelAttribute="newEmpPassword">
+			<h3 class="text-center text-secondary-emphasis">تغيير كلمة عبور ${thisEmployee.firstNameAr} ${thisEmployee.lastNameAr}</h1>
 			<div class="input-box">
 				<form:password path="password" placeholder="Password" />
-				<i class="bx bxs-lock-alt"></i>
 			</div>
 			<div class="errors">
 				<form:errors path="password" class="text-danger" />
 			</div>
-			<button type="submit" class="btn">Login</button>
+			<div class="input-box">
+				<form:password path="confirm" placeholder="Confirm Password" />
+			</div>
+			<div class="errors">
+				<form:errors path="confirm" class="text-danger" />
+			</div>
+			<button type="submit" class="btn fs-4">تغــــــيير</button>
 		</form:form>
 	</div>
 </body>

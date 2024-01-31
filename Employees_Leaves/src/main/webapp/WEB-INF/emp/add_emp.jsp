@@ -20,7 +20,8 @@
 	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet"	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
@@ -28,7 +29,8 @@
 <title>Add Employee</title>
 </head>
 <body style="background-color: #161615;">
-	<form:form action="/create/employee" method="post" modelAttribute="newEmployee">
+	<form:form action="/create/employee" method="post"
+		modelAttribute="newEmployee">
 		<div
 			class="container d-flex flex-column justify-content-between mt-3 border border-bottom-0 border-primary"
 			style="width: 1000px; background-color: #DAA520;">
@@ -42,36 +44,36 @@
 				<div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">First Name:</label>
-						<form:errors path="firstName" class="text-danger"/>
+						<form:errors path="firstName" class="text-danger" />
 						<form:input path="firstName" type="text" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">Last Name:</label>
-						<form:errors path="lastName" class="text-danger"/>
+						<form:errors path="lastName" class="text-danger" />
 						<form:input path="lastName" type="text" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">E-mail (البريد
 							الالكتروني):</label>
-							<form:errors path="email" class="text-danger"/>
+						<form:errors path="email" class="text-danger" />
 						<form:input path="email" type="email" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold" style="color: #8a0f0f;">Password
 							(كلمة العبور):</label>
-							<form:errors path="password" class="text-danger"/>
+						<form:errors path="password" class="text-danger" />
 						<form:password path="password" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">Adress:</label>
-						<form:errors path="address" class="text-danger"/>
+						<form:errors path="address" class="text-danger" />
 						<form:textarea path="address" class="form-control" rows="2" />
 					</div>
 					<div class="form-label d-flex justify-content-between"
 						style="width: 470px;">
 						<div class="mb-3" style="width: 470px;">
 							<label class="form-label fw-bold">Title:</label>
-							<form:errors path="title" class="text-danger"/>
+							<form:errors path="title" class="text-danger" />
 							<form:select path="title" class="form-select">
 								<form:option value="technicien">Technicien</form:option>
 								<form:option value="bibliothecaire">Bibliothecaire</form:option>
@@ -85,7 +87,7 @@
 						style="width: 470px;">
 						<div class="mb-3" style="width: 350px;">
 							<label class="form-label fw-bold">Range:</label>
-							<form:errors path="rangeEmployee" class="text-danger"/>
+							<form:errors path="rangeEmployee" class="text-danger" />
 							<form:select path="rangeEmployee" class="form-select">
 								<form:option value="technicien">technicien</form:option>
 								<form:option value="bibliothecaire">bibliothecaire</form:option>
@@ -96,7 +98,7 @@
 						</div>
 						<div class="mb-3" style="width: 100px;">
 							<label class="form-label fw-bold">Category</label>
-							<form:errors path="category" class="text-danger"/>
+							<form:errors path="category" class="text-danger" />
 							<form:select path="category" class="form-select">
 								<form:option value="A1">A1</form:option>
 								<form:option value="A2">A2</form:option>
@@ -110,35 +112,38 @@
 				<div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label d-flex justify-content-end fw-bold">:الإسم</label>
-						<form:errors path="firstNameAr" class="text-danger"/>
-						<form:input path="firstNameAr" type="text" class="form-control text-end" />
+						<form:errors path="firstNameAr" class="text-danger" />
+						<form:input path="firstNameAr" type="text"
+							class="form-control text-end" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label d-flex justify-content-end fw-bold">:اللقب</label>
-						<form:errors path="lastNameAr" class="text-danger"/>
-						<form:input path="lastNameAr" type="text" class="form-control text-end" />
+						<form:errors path="lastNameAr" class="text-danger" />
+						<form:input path="lastNameAr" type="text"
+							class="form-control text-end" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">Phone Number (رقم
 							الهاتف):</label>
-							<form:errors path="phoneNumber" class="text-danger"/>
+						<form:errors path="phoneNumber" class="text-danger" />
 						<form:input path="phoneNumber" type="text" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold" style="color: #8a0f0f;">Confirm
 							Password (تأكيد كلمة العبور):</label>
-							<form:errors path="confirm" class="text-danger"/>
+						<form:errors path="confirm" class="text-danger" />
 						<form:input path="confirm" type="password" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label
 							class="form-label d-flex justify-content-end fw-bold fw-bold">:العنوان</label>
-							<form:errors path="addressAr" class="text-danger"/>
-						<form:textarea path="addressAr" class="form-control text-end" rows="2" />
+						<form:errors path="addressAr" class="text-danger" />
+						<form:textarea path="addressAr" class="form-control text-end"
+							rows="2" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label d-flex justify-content-end fw-bold">:الخطة</label>
-						<form:errors path="titleAr" class="text-danger"/>
+						<form:errors path="titleAr" class="text-danger" />
 						<form:select path="titleAr" class="form-select text-end">
 							<form:option value="تقني">تقني</form:option>
 							<form:option value="مكتبي">مكتبي</form:option>
@@ -151,7 +156,7 @@
 						style="width: 470px;">
 						<div class="mb-3" style="width: 100px;">
 							<label class="form-label d-flex justify-content-end fw-bold">:الصنف</label>
-							<form:errors path="rangeAr" class="text-danger"/>
+							<form:errors path="rangeAr" class="text-danger" />
 							<form:select path="rangeAr" class="form-select text-end">
 								<form:option value="أ1">أ1</form:option>
 								<form:option value="أ2">أ2</form:option>
@@ -162,7 +167,7 @@
 						</div>
 						<div class="mb-3" style="width: 350px;">
 							<label class="form-label d-flex justify-content-end fw-bold">:الرتبة</label>
-							<form:errors path="categoryAr" class="text-danger"/>
+							<form:errors path="categoryAr" class="text-danger" />
 							<form:select path="categoryAr" class="form-select text-end">
 								<form:option value="تقني">تقني</form:option>
 								<form:option value="مكتبي">مكتبي</form:option>

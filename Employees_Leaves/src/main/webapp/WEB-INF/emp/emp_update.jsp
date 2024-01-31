@@ -10,6 +10,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="/css/main.css">
+<!-- change to match your file/naming structure -->
+<script type="text/javascript" src="/js/app.js"></script>
+<!-- change to match your file/naming structure -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -22,154 +26,173 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 	crossorigin="anonymous"></script>
-<title>Employee Details</title>
+<title>Update Employee</title>
 </head>
 <body style="background-color: #161615;">
-	<div class="container my-3 border border-primary"
-		style="width: 1000px; background-color: #DAA520;">
-		<nav class="d-flex justify-content-between mt-3">
-			<div class="d-flex justify-content-between align-items-center"
-				style="width: 20%;">
+	<form:form action="/employees/edit/${employee.id}" method="post"
+		modelAttribute="updateEmp">
+		
+		<div
+			class="container d-flex flex-column justify-content-between mt-3 border border-bottom-0 border-primary"
+			style="width: 1000px; background-color: #DAA520;">
+			<div class="text-center">
+				<h1 style="color: #ffffffc5;">المعطيات الخاصة بـ
+					${employee.firstNameAr } ${employee.lastNameAr }</h1>
 				<a href="/admin_dashboard"><i
 					class='fa fa-home w3-xlarge btn btn-primary fw-bold'
 					style="color: #4980aa; background-color: #5b96c7ef; color: #ffffffc5;"></i></a>
 			</div>
-			<div>
-				<h4 class="text" style="color: #ffffffc5;">${user.firstName}
-					:المستخدم</h4>
+			<div class="d-flex justify-content-between">
+				<div>
+					<div class="mb-3" style="width: 470px;">
+						<label class="form-label fw-bold">First Name:</label>
+						<form:errors path="firstName" class="text-danger" />
+						<form:input path="firstName" value="${employee.firstName}" type="text" class="form-control" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<label class="form-label fw-bold">Last Name:</label>
+						<form:errors path="lastName" class="text-danger" />
+						<form:input path="lastName" value="${employee.lastName}"
+							type="text" class="form-control" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<label class="form-label fw-bold">E-mail (البريد
+							الالكتروني):</label>
+						<form:errors path="email" class="text-danger" />
+						<form:input path="email" value="${employee.email}" type="email"
+							class="form-control" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<form:errors path="password" class="text-danger" />
+						<form:input path="password" value="${employee.password}" type="hidden"
+							class=" form-control" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<label class="form-label fw-bold">Adress:</label>
+						<form:errors path="address" class="text-danger" />
+						<form:input path="address" value="${employee.address}"
+							class="form-control" rows="2" />
+					</div>
+					<div class="form-label d-flex justify-content-between"
+						style="width: 470px;">
+						<div class="mb-3" style="width: 470px;">
+							<label class="form-label fw-bold">Title:</label>
+							<form:errors path="title" class="text-danger" />
+							<form:select path="title" class="form-select">
+								<form:option value="technicien">Technicien</form:option>
+								<form:option value="bibliothecaire">Bibliothecaire</form:option>
+								<form:option value="conseiller">Conseiller</form:option>
+								<form:option value="gardien">Gardien</form:option>
+								<form:option value="nettoyage">Nettoyage</form:option>
+							</form:select>
+						</div>
+					</div>
+					<div class="form-label d-flex justify-content-between"
+						style="width: 470px;">
+						<div class="mb-3" style="width: 350px;">
+							<label class="form-label fw-bold">Range:</label>
+							<form:errors path="rangeEmployee" class="text-danger" />
+							<form:select path="rangeEmployee" class="form-select">
+								<form:option value="technicien">technicien</form:option>
+								<form:option value="bibliothecaire">bibliothecaire</form:option>
+								<form:option value="conseiller">conseiller</form:option>
+								<form:option value="ouvrier">Ouvrier</form:option>
+								<form:option value="conseiller">Conseiller</form:option>
+							</form:select>
+						</div>
+						<div class="mb-3" style="width: 100px;">
+							<label class="form-label fw-bold">Category</label>
+							<form:errors path="category" class="text-danger" />
+							<form:select path="category" class="form-select">
+								<form:option value="A1">A1</form:option>
+								<form:option value="A2">A2</form:option>
+								<form:option value="A3">A3</form:option>
+								<form:option value="B">B</form:option>
+								<form:option value="C">C</form:option>
+							</form:select>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div class="mb-3" style="width: 470px;">
+						<label class="form-label d-flex justify-content-end fw-bold">:الإسم</label>
+						<form:errors path="firstNameAr" class="text-danger" />
+						<form:input path="firstNameAr"
+							value="${employee.firstNameAr}" type="text"
+							class="form-control text-end" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<label class="form-label d-flex justify-content-end fw-bold">:اللقب</label>
+						<form:errors path="lastNameAr" class="text-danger" />
+						<form:input path="lastNameAr" value="${employee.lastNameAr}" type="text"
+							class="form-control text-end" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<label class="form-label fw-bold">Phone Number (رقم
+							الهاتف):</label>
+						<form:errors path="phoneNumber" class="text-danger" />
+						<form:input path="phoneNumber"
+							value="${employee.phoneNumber}" type=" text" class="form-control" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<form:errors path="confirm" class="text-danger" />
+						<form:input path="confirm" value="${employee.password}" type="hidden" class="form-control" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<label
+							class="form-label d-flex justify-content-end fw-bold fw-bold">:العنوان</label>
+						<form:errors path="addressAr" class="text-danger" />
+						<form:input path="addressAr" type="text"
+							value="${employee.addressAr}" class=" form-control text-end" />
+					</div>
+					<div class="mb-3" style="width: 470px;">
+						<label class="form-label d-flex justify-content-end fw-bold">:الخطة</label>
+						<form:errors path="titleAr" class="text-danger" />
+						<form:select path="titleAr" class="form-select text-end">
+							<form:option value="تقني">تقني</form:option>
+							<form:option value="مكتبي">مكتبي</form:option>
+							<form:option value="متصرف">متصرف</form:option>
+							<form:option value="حارس">حارس</form:option>
+							<form:option value="عون تنظيف">عون تنظيف</form:option>
+						</form:select>
+					</div>
+					<div class="form-label d-flex justify-content-between"
+						style="width: 470px;">
+						<div class="mb-3" style="width: 100px;">
+							<label class="form-label d-flex justify-content-end fw-bold">:الصنف</label>
+							<form:errors path="rangeAr" class="text-danger" />
+							<form:select path="rangeAr" class="form-select text-end">
+								<form:option value="أ1">أ1</form:option>
+								<form:option value="أ2">أ2</form:option>
+								<form:option value="أ3">أ3</form:option>
+								<form:option value="ب">ب</form:option>
+								<form:option value="ج">ج</form:option>
+							</form:select>
+						</div>
+						<div class="mb-3" style="width: 350px;">
+							<label class="form-label d-flex justify-content-end fw-bold">:الرتبة</label>
+							<form:errors path="categoryAr" class="text-danger" />
+							<form:select path="categoryAr" class="form-select text-end">
+								<form:option value="تقني">تقني</form:option>
+								<form:option value="مكتبي">مكتبي</form:option>
+								<form:option value="متصرف">متصرف</form:option>
+								<form:option value="مستكتب إدارة">مستكتب إدارة</form:option>
+								<form:option value="عامل">عامل</form:option>
+							</form:select>
+						</div>
+					</div>
+				</div>
 			</div>
-		</nav>
-		<div
-			class="d-flex justify-content-center align-items-center grid gap-3 mt-5">
-			<h3 class="text text-center text-dark fw-semibold">المعطيات
-				الخاصة بـ ${employee.firstNameAr } ${employee.lastNameAr }</h3>
 		</div>
-
-		<form:form action="/employees/edit/${employee.id}" method="post"
-			modelAttribute="updateEmp">
-			<form:input path="" type="hidden" name="id" value="{{employee.id}}" />
-			<fieldset class="border border-dark">
-				<legend class="float-none w-auto text text-end">الإتصال</legend>
-				<div class="d-flex flex-column justify-content-center">
-					<div class="d-flex justify-content-between align-items-center mx-5">
-						<div class="row g-3 align-items-center">
-							<div class="col-auto">
-								<form:input path="email" type="email" value="${employee.email}"
-									class="form-control" />
-							</div>
-							<div class="col-auto">
-								<h6 class="text fw-medium">البريد الإلكتروني</h6>
-							</div>
-						</div>
-						<div class="row g-3 align-items-center">
-							<div class="col-auto">
-								<form:input path="phoneNumber" type="text"
-									value="${employee.phoneNumber}" class="form-control" />
-							</div>
-							<div class="col-auto">
-								<h6 class="text fw-medium">رقم الهاتف</h6>
-							</div>
-						</div>
-					</div>
-					<div
-						class="d-flex justify-content-end align-items-center mx-5 my-3">
-						<div class="row g-3 align-items-center">
-							<div class="col-auto">
-								<form:input path="addressAr" type="text"
-									value="${employee.addressAr}" class="form-control " dir="rtl" />
-							</div>
-							<div class="col-auto">
-								<h6 class="text fw-medium ms-4">العنوان</h6>
-							</div>
-						</div>
-					</div>
-				</div>
-			</fieldset>
-			<fieldset class="border border-dark mt-3 mb-3">
-				<legend class="float-none w-auto text text-end">معطيات
-					شخصية</legend>
-				<div class="d-flex justify-content-end">
-					<div>
-						<div
-							class="d-flex justify-content-end align-items-center grid gap-3 me-5 mb-3">
-							<div>
-								<form:select path="titleAr" class="form-select text-end mb-2"
-									value="titleAr">
-									<form:option value="تقني">تقني</form:option>
-									<form:option value="مكتبي">مكتبي</form:option>
-									<form:option value="متصرف">متصرف</form:option>
-									<form:option value="حارس">حارس</form:option>
-									<form:option value="عون تنظيف">عون تنظيف</form:option>
-								</form:select>
-							</div>
-							<h6 class="text text-dark text-center fw-medium ms-3">الخطة</h6>
-						</div>
-						<div class="d-flex">
-							<div
-								class="d-flex justify-content-end align-items-center grid gap-3 me-5 mb-3">
-								<div>
-									<form:select path="categoryAr"
-										class="form-select text-end mb-2" value="categoryAr">
-										<form:option value="تقني">تقني</form:option>
-										<form:option value="مكتبي">مكتبي</form:option>
-										<form:option value="متصرف">متصرف</form:option>
-										<form:option value="مستكتب إدارة">مستكتب إدارة</form:option>
-										<form:option value="عامل">عامل</form:option>
-									</form:select>
-								</div>
-								<h6 class="text text-dark text-center fw-medium ms-3">
-									الصنف</h6>
-							</div>
-							<div
-								class="d-flex justify-content-end align-items-center grid gap-3 me-5 mb-3">
-								<div>
-									<form:select path="rangeAr" class="form-select text-end mb-2"
-										value="rangeAr">
-										<form:option value="أ1">أ1</form:option>
-										<form:option value="أ2">أ2</form:option>
-										<form:option value="أ3">أ3</form:option>
-										<form:option value="ب">ب</form:option>
-										<form:option value="ج">ج</form:option>
-									</form:select>
-								</div>
-								<h6 class="text text-dark text-center fw-medium ms-4">
-									الرتبة</h6>
-							</div>
-						</div>
-					</div>
-					<div>
-						<div>
-							<div
-								class="d-flex justify-content-end align-items-center grid gap-3 me-5 mb-3">
-								<div>
-									<form:input type="text" path="firstNameAr" id="first_name_ar"
-										value="${employee.firstNameAr}"
-										class="form-control mx-3 text text-end" />
-								</div>
-								<h6 class="text text-dark text-center fw-medium ms-5">
-									الإسـم</h6>
-							</div>
-							<div
-								class="d-flex justify-content-end align-items-center grid gap-3 me-5 mb-3">
-								<div>
-									<form:input type="text" path="lastNameAr" name="last_name_ar"
-										id="last_name_ar" value="${employee.lastNameAr}"
-										class="form-control mx-3 text text-end" />
-								</div>
-								<h6 class="text text-dark text-center fw-medium ms-5">
-									اللقب</h6>
-							</div>
-						</div>
-					</div>
-				</div>
-			</fieldset>
-			<div class="container d-flex justify-content-center border-primary"
-				style="width: 550px; background-color: #daa520">
-				<button type="submit" class="btn btn-primary fw-bold fs-5 my-2 mb-3"
-					style="width: 300px; background-color: #5b96c7ef; color: #161615">
-					تـحـــــيــيــن</button>
-			</div>
-		</form:form>
-	</div>
+		<div
+			class="container d-flex justify-content-center border border-top-0 border-primary"
+			style="width: 1000px; background-color: #DAA520;">
+			<button type="submit" class="btn btn-primary my-2 fw-bold"
+				style="width: 300px; background-color: #5b96c7ef; color: #161615;">Add
+				- إضافة</button>
+		</div>
+	</form:form>
+</body>
+</html>
 </body>
 </html>

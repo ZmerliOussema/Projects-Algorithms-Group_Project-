@@ -31,132 +31,134 @@ public class LeaveController {
 
 	@Autowired
 	private EmployeeService employeeService;
-	
-	@Autowired
-	private HttpSession session;
 
-//*****View all leaves for admin******		
+//*****View all leaves for admin - Start******		
 	@GetMapping("/admin_dashboard")
-	public String adminDashboard(Model model, Leave leave) {
+	public String adminDashboard(Model model, HttpSession session) {
 
-	    // Verify admin and normal user
-	    Long loggedInUserId = (Long) session.getAttribute("employeeId");
-	    if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
-	        return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/employees/" + loggedInUserId;
-	    }
+		// Grab the user id from session
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
+		// Route guard
+		// Redirect to employee dashboard if is not admin
+		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
+			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/employees/" + loggedInUserId;
+		}
 
-	    List<Leave> allLeaves = leaveService.all(); // get all leaves
-	    Map<Long, Map<String, Object>> combinedLeaves = new HashMap<>(); // create map for combined leaves
+		List<Leave> allLeaves = leaveService.all(); // get all leaves
+		Map<Long, Map<String, Object>> combinedLeaves = new HashMap<>(); // create map for combined leaves
 
-	    // Filter and process approved leaves
-	    List<Leave> approvedLeaves = allLeaves.stream()
-	            .filter(l -> "Approved".equals(l.getStatus()))
-	            .collect(Collectors.toList());
+		// Filter and process approved leaves
+		List<Leave> approvedLeaves = allLeaves.stream().filter(l -> "Approved".equals(l.getStatus()))
+				.collect(Collectors.toList());
 
-	    for (Leave leave1 : approvedLeaves) { // loop through approved leaves
-	        Long ownerId = leave1.getOwner().getId(); // get owner id
-	        String ownerFirstName = leave1.getOwner().getFirstNameAr(); // get owner first name
-	        String ownerLastName = leave1.getOwner().getLastNameAr() ;  // get owner last name
+		for (Leave leaves : approvedLeaves) { // loop through approved leaves
+			Long ownerId = leaves.getOwner().getId(); // get owner id
+			String ownerFirstName = leaves.getOwner().getFirstNameAr(); // get owner first name
+			String ownerLastName = leaves.getOwner().getLastNameAr(); // get owner last name
 
-	        Map<String, Object> ownerData = combinedLeaves.computeIfAbsent(ownerId, k -> new HashMap<>()); // create map for owner data
-	        ownerData.put("firstNameAr", ownerFirstName); // add owner first name to map
-	        ownerData.put("lastNameAr", ownerLastName); // add owner last name to map
-	        ownerData.put("annual", (int) ownerData.getOrDefault("annual", 0) + leave1.getAnnual()); // add annual leave to map
-	        ownerData.put("specificLeave", (int) ownerData.getOrDefault("specificLeave", 0) + leave1.getSpecificLeave()); // add specific leave to map
-	        ownerData.put("sick", (int) ownerData.getOrDefault("sick", 0) + leave1.getSick()); // add sick leave to map
-	    }
+			Map<String, Object> ownerData = combinedLeaves.computeIfAbsent(ownerId, k -> new HashMap<>()); // create map
+																											// for owner
+																											// data
+			ownerData.put("firstNameAr", ownerFirstName); // add owner first name to map
+			ownerData.put("lastNameAr", ownerLastName); // add owner last name to map
+			ownerData.put("annual", (int) ownerData.getOrDefault("annual", 0) + leaves.getAnnual()); // add annual leave
+																										// to map
+			ownerData.put("specificLeave",
+					(int) ownerData.getOrDefault("specificLeave", 0) + leaves.getSpecificLeave()); // add specific leave
+																									// to map
+			ownerData.put("sick", (int) ownerData.getOrDefault("sick", 0) + leaves.getSick()); // add sick leave to map
+		}
 
-	    // Loop through all employees and include those who don't have leaves
-	    List<Employee> allEmployees = employeeService.allEmployees();
-	    for (Employee employee : allEmployees) {
-	        Long employeeId = employee.getId();
-	        if (!combinedLeaves.containsKey(employeeId)) {
-	            Map<String, Object> ownerData = new HashMap<>();
-	            ownerData.put("firstNameAr", employee.getFirstNameAr());
-	            ownerData.put("lastNameAr", employee.getLastNameAr());
-	            ownerData.put("annual", 0);
-	            ownerData.put("specificLeave", 0);
-	            ownerData.put("sick", 0);
+		// Loop through all employees and include those who don't have leaves
+		List<Employee> allEmployees = employeeService.allEmployees();
+		for (Employee employee : allEmployees) {
+			Long employeeId = employee.getId();
+			if (!combinedLeaves.containsKey(employeeId)) {
+				Map<String, Object> ownerData = new HashMap<>();
+				ownerData.put("firstNameAr", employee.getFirstNameAr());
+				ownerData.put("lastNameAr", employee.getLastNameAr());
+				ownerData.put("annual", 0);
+				ownerData.put("specificLeave", 0);
+				ownerData.put("sick", 0);
 
-	            combinedLeaves.put(employeeId, ownerData);
-	        }
-	    }
+				combinedLeaves.put(employeeId, ownerData);
+			}
+		}
 
-	    model.addAttribute("combinedLeaves", combinedLeaves); // add combined leaves to model
-	    model.addAttribute("user", employeeService.findById(loggedInUserId));
-	    model.addAttribute("employees", allEmployees);
-	    return "admin/admin_dashboard.jsp";
+		model.addAttribute("combinedLeaves", combinedLeaves); // add combined leaves to model
+		model.addAttribute("user", employeeService.findById(loggedInUserId));
+		model.addAttribute("employees", allEmployees);
+		return "admin/admin_dashboard.jsp";
 	}
+//*****View all leaves for admin - End******	
 
-	//*****View all leaves for admin******	
-	
-//*****View all leaves for employee******	
+//*****View all leaves for employee - Start******	
 	@GetMapping("/employees/{id}")
-	public String employeeDashboard(@PathVariable("id") Long id, Model model) {
+	public String employeeDashboard(@PathVariable("id") Long id, Model model, HttpSession session) {
 
-		  Long loggedInUserId = (Long) session.getAttribute("employeeId");
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
-		    if (loggedInUserId == null) {
-		        return "redirect:/logout";
-		    }
+		if (loggedInUserId == null) {
+			return "redirect:/logout";
+		}
 
-		    Employee user = employeeService.findById(loggedInUserId);
-		    String userRole = user.getRole();
+		Employee user = employeeService.findById(loggedInUserId);
+		String userRole = user.getRole();
 
-		    if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
-		        return "redirect:/employees/" + loggedInUserId;
-		    }
+		if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
+			return "redirect:/employees/" + loggedInUserId;
+		}
 
-	    List<Leave> allLeaves = leaveService.getLeavesByEmployeeId(id);
-	    List<Leave> approvedLeaves = allLeaves.stream()
-	            .filter(leave -> "Approved".equals(leave.getStatus()))
-	            .collect(Collectors.toList());
+		List<Leave> allLeaves = leaveService.getLeavesByEmployeeId(id);
+		List<Leave> approvedLeaves = allLeaves.stream().filter(leave -> "Approved".equals(leave.getStatus()))
+				.collect(Collectors.toList());
 
-	    model.addAttribute("leaves", approvedLeaves); // Set approved leaves for the employee dashboard
-	    model.addAttribute("user", user); // Get user name
-	    model.addAttribute("employee", employeeService.findById(id)); // Get employee name
+		model.addAttribute("leaves", approvedLeaves); // Set approved leaves for the employee dashboard
+		model.addAttribute("user", user); // Get user
+		model.addAttribute("employee", employeeService.findById(id)); // Get employee
 
-	    return "emp/emp_dashboard.jsp";
+		return "emp/emp_dashboard.jsp";
 	}
-	//*****View all leaves for employee******
-	
-//*****View and add annual leaves for employee******
+// *****View all leaves for employee - End******
+
+//*****View and add annual leaves for employee - Start******
 	@GetMapping("/employees/annual/{id}")
-	public String viewAnnualLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, Model model) {
-	    Long loggedInUserId = (Long) session.getAttribute("employeeId");
+	public String viewAnnualLeave(@PathVariable("id") Long id, @ModelAttribute("newLeave") Leave leave, Model model,
+			HttpSession session) {
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
-	    if (loggedInUserId == null) {
-	        return "redirect:/logout";
-	    }
+		if (loggedInUserId == null) {
+			return "redirect:/logout";
+		}
 
-	    Employee user = employeeService.findById(loggedInUserId);
-	    String userRole = user.getRole();
+		Employee user = employeeService.findById(loggedInUserId);
+		String userRole = user.getRole();
 
-	    if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
-	        return "redirect:/employees/annual/" + loggedInUserId;
-	    }
+		if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
+			return "redirect:/employees/annual/" + loggedInUserId;
+		}
 
-	    List<Leave> allLeaves = leaveService.getAnnualLeavesByEmployeeId(id);
-	    List<Leave> approvedLeaves = allLeaves.stream()
-	            .filter(l -> "Approved".equals(l.getStatus()))
-	            .collect(Collectors.toList());
+		List<Leave> allLeaves = leaveService.getAnnualLeavesByEmployeeId(id);
+		List<Leave> approvedLeaves = allLeaves.stream().filter(l -> "Approved".equals(l.getStatus()))
+				.collect(Collectors.toList());
 
-	    model.addAttribute("leaves", approvedLeaves);
-	    model.addAttribute("user", user);
-	    model.addAttribute("employee", employeeService.findById(id));
-	    session.setAttribute("tempId", id);
+		model.addAttribute("leaves", approvedLeaves);
+		model.addAttribute("user", user);
+		model.addAttribute("employee", employeeService.findById(id));
+		session.setAttribute("tempId", id);
 
-	    return "emp/emp_annual_leave.jsp";
+		return "emp/emp_annual_leave.jsp";
 	}
 
 	@PostMapping("/employees/annual/add")
-	public String addAnnualLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result, Model model) {
+	public String addAnnualLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result, Model model,
+			HttpSession session) {
 		// verification admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
 			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/access-denied";
 		}
-		
+
 		if (result.hasErrors()) {
 			return "emp/emp_annual_leave.jsp";
 		} else {
@@ -167,38 +169,37 @@ public class LeaveController {
 			return "redirect:/employees/annual/" + tempId;
 		}
 	}
-	//*****View and add annual leaves for employee******
-	
-//*****View and add specific leaves for employee******
+// *****View and add annual leaves for employee - End******
+
+//*****View and add specific leaves for employee - Start******
 	@GetMapping("/employees/specific/{id}")
-	public String viewSpecificLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, Model model) {
-	    Long loggedInUserId = (Long) session.getAttribute("employeeId");
+	public String viewSpecificLeave(@PathVariable("id") Long id, @ModelAttribute("newLeave") Leave leave, Model model,
+			HttpSession session) {
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
-	    if (loggedInUserId == null) {
-	        return "redirect:/logout";
-	    }
+		if (loggedInUserId == null) {
+			return "redirect:/logout";
+		}
 
-	    Employee user = employeeService.findById(loggedInUserId);
-	    String userRole = user.getRole();
+		Employee user = employeeService.findById(loggedInUserId);
+		String userRole = user.getRole();
 
-	    if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
-	        return "redirect:/employees/specific/" + loggedInUserId;
-	    }
+		if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
+			return "redirect:/employees/specific/" + loggedInUserId;
+		}
 
-	    List<Leave> allLeaves = leaveService.getSpecificLeavesByEmployeeId(id);
-	    List<Leave> approvedLeaves = allLeaves.stream()
-	            .filter(l -> "Approved".equals(l.getStatus()))
-	            .collect(Collectors.toList());
+		List<Leave> allLeaves = leaveService.getSpecificLeavesByEmployeeId(id);
+		List<Leave> approvedLeaves = allLeaves.stream().filter(l -> "Approved".equals(l.getStatus()))
+				.collect(Collectors.toList());
 
-	    model.addAttribute("leaves", approvedLeaves);
-	    model.addAttribute("user", user);
-	    model.addAttribute("employee", employeeService.findById(id));
-	    session.setAttribute("tempId", id);
+		model.addAttribute("leaves", approvedLeaves);
+		model.addAttribute("user", user);
+		model.addAttribute("employee", employeeService.findById(id));
+		session.setAttribute("tempId", id);
 
-	    return "emp/emp_specific_leaves.jsp";
+		return "emp/emp_specific_leaves.jsp";
 	}
-	
-	
+
 	@PostMapping("/employees/specific/add")
 	public String addSpecificLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result,
 			HttpSession session) {
@@ -218,37 +219,36 @@ public class LeaveController {
 			return "redirect:/employees/specific/" + tempId;
 		}
 	}
-	//*****View and add specific leaves for employee******
-	
-//*****View and add sick leaves for employee******	
+// *****View and add specific leaves for employee - End******
+
+//*****View and add sick leaves for employee - Start******	
 	@GetMapping("/employees/sick/{id}")
-	public String viewSickLeave(@PathVariable("id") Long id,@ModelAttribute("newLeave") Leave leave, Model model) {
-	    Long loggedInUserId = (Long) session.getAttribute("employeeId");
+	public String viewSickLeave(@PathVariable("id") Long id, @ModelAttribute("newLeave") Leave leave, Model model,
+			HttpSession session) {
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
-	    if (loggedInUserId == null) {
-	        return "redirect:/logout";
-	    }
+		if (loggedInUserId == null) {
+			return "redirect:/logout";
+		}
 
-	    Employee user = employeeService.findById(loggedInUserId);
-	    String userRole = user.getRole();
+		Employee user = employeeService.findById(loggedInUserId);
+		String userRole = user.getRole();
 
-	    if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
-	        return "redirect:/employees/sick/" + loggedInUserId;
-	    }
+		if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
+			return "redirect:/employees/sick/" + loggedInUserId;
+		}
 
-	    List<Leave> allLeaves = leaveService.getSickLeavesByEmployeeId(id);
-	    List<Leave> approvedLeaves = allLeaves.stream()
-	            .filter(l -> "Approved".equals(l.getStatus()))
-	            .collect(Collectors.toList());
+		List<Leave> allLeaves = leaveService.getSickLeavesByEmployeeId(id);
+		List<Leave> approvedLeaves = allLeaves.stream().filter(l -> "Approved".equals(l.getStatus()))
+				.collect(Collectors.toList());
 
-	    model.addAttribute("leaves", approvedLeaves);
-	    model.addAttribute("user", user);
-	    model.addAttribute("employee", employeeService.findById(id));
-	    session.setAttribute("tempId", id);
+		model.addAttribute("leaves", approvedLeaves);
+		model.addAttribute("user", user);
+		model.addAttribute("employee", employeeService.findById(id));
+		session.setAttribute("tempId", id);
 
-	    return "emp/emp_sick_leaves.jsp";
+		return "emp/emp_sick_leaves.jsp";
 	}
-	
 
 	@PostMapping("/employees/sick/add")
 	public String addSickLeave(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result,
@@ -269,26 +269,11 @@ public class LeaveController {
 			return "redirect:/employees/sick/" + tempId;
 		}
 	}
-	//*****View and add sick leaves for employee******	
-	
-//**** delete employee for admin******
-	@DeleteMapping("/employees/{id}/delete")
-	public String deleteEmployee(@PathVariable("id") Long id) {
+// *****View and add sick leaves for employee - End******
 
-		// verification admin and normal user
-		Long loggedInUserId = (Long) session.getAttribute("employeeId");
-		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
-			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/access-denied";
-		}
-
-		Employee employee = employeeService.findById(id);
-		employeeService.deleteEmployee(employee);
-		return "redirect:/admin_dashboard";
-	}
-
-//**** delete leave for admin******
+//**** delete leave for admin - Start******
 	@DeleteMapping("/leave/{id}/delete")
-	public String deleteLeave(@PathVariable("id") Long id) {
+	public String deleteLeave(@PathVariable("id") Long id, HttpSession session) {
 
 		// verification admin and normal user
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
@@ -300,106 +285,109 @@ public class LeaveController {
 		leaveService.deleteLeave(leave);
 		return "redirect:/employees/" + leave.getOwner().getId();
 	}
+//**** delete leave for admin - End******
 
-    //*****Employee Request Leave*****//
-    @GetMapping("/requestLeave/{id}")
-    public String requestLeave(@PathVariable("id") Long id,Model model) {
-    	
-  	  Long loggedInUserId = (Long) session.getAttribute("employeeId");
+// *****Employee Request Leave - Start*****//
+	@GetMapping("/requestLeave/{id}")
+	public String requestLeave(@PathVariable("id") Long id, Model model, HttpSession session) {
 
-	    if (loggedInUserId == null) {
-	        return "redirect:/logout";
-	    }
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
-	    Employee user = employeeService.findById(loggedInUserId);
-	    String userRole = user.getRole();
+		if (loggedInUserId == null) {
+			return "redirect:/logout";
+		}
 
-	    if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
-	        return "redirect:/requestLeave/" + loggedInUserId;
-	    }
-	    
-    	model.addAttribute("user", user);
-        model.addAttribute("newLeave", new Leave());
-        return "emp/request_leave_form.jsp";
-    }
+		Employee user = employeeService.findById(loggedInUserId);
+		String userRole = user.getRole();
 
-    @PostMapping("/requestLeave")
-    public String submitLeaveRequest(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result) {
-        Long loggedInUserId = (Long) session.getAttribute("employeeId");
-        if (loggedInUserId == null) {
-            return "redirect:/logout";
-        }
-        if (result.hasErrors()) {
-            return "emp/request_leave_form.jsp";
-        }
-        leave.setOwner(employeeService.findById(loggedInUserId));
-        leaveService.addLeave(leave);
-        return "redirect:/employees/" + loggedInUserId;
-    }
-    //*****Employee Request Leave*****//
-    
-    //****** Admin View Employee Leave Requests *****//
-    @GetMapping("/employeeLeaveRequests")
-    public String viewEmployeeLeaveRequests(Model model) {
-        Long loggedInUserId = (Long) session.getAttribute("employeeId");
-        if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
-            return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/access-denied";
-        }
-        List<Leave> leaveRequests = leaveService.all();
-        model.addAttribute("leaveRequests", leaveRequests);
-        model.addAttribute("user", employeeService.findById(loggedInUserId));
-        return "admin/leave_requests.jsp";
-    }
+		if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
+			return "redirect:/requestLeave/" + loggedInUserId;
+		}
 
-    //==> Admin Approve Leave Request
-    @PostMapping("/approveLeaveRequest/{leaveId}")
-    public String approveLeaveRequest(@PathVariable("leaveId") Long leaveId) {
+		model.addAttribute("user", user);
+		model.addAttribute("newLeave", new Leave());
+		return "emp/request_leave_form.jsp";
+	}
+
+	@PostMapping("/requestLeave")
+	public String submitLeaveRequest(@Valid @ModelAttribute("newLeave") Leave leave, BindingResult result,
+			HttpSession session) {
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
+		if (loggedInUserId == null) {
+			return "redirect:/logout";
+		}
+		if (result.hasErrors()) {
+			return "emp/request_leave_form.jsp";
+		}
+		leave.setOwner(employeeService.findById(loggedInUserId));
+		leaveService.addLeave(leave);
+		return "redirect:/employees/" + loggedInUserId;
+	}
+// *****Employee Request Leave - End*****//
+
+// ****** Admin View Employee Leave Requests - Start *****//
+	@GetMapping("/employeeLeaveRequests")
+	public String viewEmployeeLeaveRequests(Model model, HttpSession session) {
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
 			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/access-denied";
 		}
-		
-        Leave leave = leaveService.findById(leaveId);
-        leave.setStatus("Approved");
-        leaveService.update(leave);
-        return "redirect:/employeeLeaveRequests";
-    }
-    //==> Admin Deny Leave Request	
-    @PostMapping("/denyLeaveRequest/{leaveId}")
-    public String denyLeaveRequest(@PathVariable("leaveId") Long leaveId, HttpSession session) {
+		List<Leave> leaveRequests = leaveService.all();
+		model.addAttribute("leaveRequests", leaveRequests);
+		model.addAttribute("user", employeeService.findById(loggedInUserId));
+		return "admin/leave_requests.jsp";
+	}
+
+	// ==> Admin Approve Leave Request
+	@PostMapping("/approveLeaveRequest/{leaveId}")
+	public String approveLeaveRequest(@PathVariable("leaveId") Long leaveId, HttpSession session) {
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
 			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/access-denied";
 		}
-		
-        Leave leave = leaveService.findById(leaveId);
-        leave.setStatus("Denied");
-        leaveService.update(leave);
-        return "redirect:/employeeLeaveRequests";
-    }
-  //****** Admin View Employee Leave Requests *****//
-    
-    //****** Employee View their status Leave Requests *****//
-    @GetMapping("/leavestatus/{id}")
-    public String leaveStatus(@PathVariable("id") Long id,Model model) {
-    	
-  	  Long loggedInUserId = (Long) session.getAttribute("employeeId");
 
-	    if (loggedInUserId == null) {
-	        return "redirect:/logout";
-	    }
+		Leave leave = leaveService.findById(leaveId);
+		leave.setStatus("Approved");
+		leaveService.update(leave);
+		return "redirect:/employeeLeaveRequests";
+	}
 
-	    Employee user = employeeService.findById(loggedInUserId);
-	    String userRole = user.getRole();
+	// ==> Admin Deny Leave Request
+	@PostMapping("/denyLeaveRequest/{leaveId}")
+	public String denyLeaveRequest(@PathVariable("leaveId") Long leaveId, HttpSession session) {
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
+		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
+			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/access-denied";
+		}
 
-	    if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
-	        return "redirect:/leavestatus/" + loggedInUserId;
-	    }
-	    
-    	model.addAttribute("user", user);
-    	 List<Leave> leaveRequests = leaveService.getLeavesByEmployeeId(id);
-    	 model.addAttribute("leaves", leaveRequests);
-        return "emp/leave_status.jsp";
-    }
-  //****** Employee View their status Leave Requests *****//
+		Leave leave = leaveService.findById(leaveId);
+		leave.setStatus("Denied");
+		leaveService.update(leave);
+		return "redirect:/employeeLeaveRequests";
+	}
+// ****** Admin View Employee Leave Requests - End *****//
+
+// ****** Employee View their status Leave Requests - Start *****//
+	@GetMapping("/leavestatus/{id}")
+	public String leaveStatus(@PathVariable("id") Long id, Model model, HttpSession session) {
+
+		Long loggedInUserId = (Long) session.getAttribute("employeeId");
+
+		if (loggedInUserId == null) {
+			return "redirect:/logout";
+		}
+
+		Employee user = employeeService.findById(loggedInUserId);
+		String userRole = user.getRole();
+
+		if (!"admin".equals(userRole) && !loggedInUserId.equals(id)) {
+			return "redirect:/leavestatus/" + loggedInUserId;
+		}
+
+		model.addAttribute("user", user);
+		List<Leave> leaveRequests = leaveService.getLeavesByEmployeeId(id);
+		model.addAttribute("leaves", leaveRequests);
+		return "emp/leave_status.jsp";
+	}
+// ****** Employee View their status Leave Requests - End *****//
 }

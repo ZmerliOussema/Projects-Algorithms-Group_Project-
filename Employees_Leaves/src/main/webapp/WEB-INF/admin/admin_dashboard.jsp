@@ -90,19 +90,18 @@
     <c:set var="totalSick" value="60" />
     <c:set var="totalSpecificLeave" value="6" />
 
-    <c:forEach var="ownerId" items="${combinedLeaves.keySet()}">
-        <c:if test="${ownerId != 1}">
+    <c:forEach var="employeeId" items="${combinedLeaves.keySet()}">
             <tr class="employeeRow">
-                <td>${totalSick - combinedLeaves[ownerId].sick}</td>
-                <td>${combinedLeaves[ownerId].sick}</td>
-                <td class="table-active">${totalSpecificLeave - combinedLeaves[ownerId].specificLeave}</td>
-                <td class="table-active">${combinedLeaves[ownerId].specificLeave}</td>
-                <td>${totalAnnual - combinedLeaves[ownerId].annual}</td>
-                <td>${combinedLeaves[ownerId].annual}</td>
+                <td>${totalSick - combinedLeaves[employeeId].sick}</td>
+                <td>${combinedLeaves[employeeId].sick}</td>
+                <td class="table-active">${totalSpecificLeave - combinedLeaves[employeeId].specificLeave}</td>
+                <td class="table-active">${combinedLeaves[employeeId].specificLeave}</td>
+                <td>${totalAnnual - combinedLeaves[employeeId].annual}</td>
+                <td>${combinedLeaves[employeeId].annual}</td>
                 <td class="table-active d-flex justify-content-end align-items-center">
-                    <a href="/employees/${ownerId}">${combinedLeaves[ownerId].firstNameAr} ${combinedLeaves[ownerId].lastNameAr}</a>
+                    <a href="/employees/${employeeId}">${combinedLeaves[employeeId].firstNameAr} ${combinedLeaves[employeeId].lastNameAr}</a>
 
-                    <form action="/employees/${ownerId}/delete" method="post">
+                    <form action="/employees/${employeeId}/delete" method="post">
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="btn btn-danger ms-4">
                             <i class="fa fa-solid fa-trash"></i>
@@ -110,7 +109,6 @@
                     </form>
                 </td>
             </tr>
-        </c:if>
     </c:forEach>
 </tbody>
 
