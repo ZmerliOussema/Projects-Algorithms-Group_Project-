@@ -244,7 +244,8 @@ public class EmployeeController {
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
 			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/employees/" + loggedInUserId;
 		} else {
-			if (leaveService.getLeavesByEmployeeId(id) != null) {
+			if (!leaveService.getLeavesByEmployeeId(id).isEmpty())
+            {
 				return "redirect:/admin_dashboard?error=1";
 			}
 			employeeService.deleteEmployee(id);
