@@ -100,10 +100,10 @@
 						${employee.firstNameAr} ${employee.lastNameAr}</h6>
 					<h6 class="text fw-medium text-end">الخطة :
 						${employee.titleAr}</h6>
-					<h6 class="text fw-medium text-end">الصنف :
-						${employee.categoryAr}</h6>
 					<h6 class="text fw-medium text-end">الرتبة :
 						${employee.rangeAr}</h6>
+					<h6 class="text fw-medium text-end">الصنف :
+						${employee.categoryAr}</h6>
 				</div>
 			</div>
 		</fieldset>

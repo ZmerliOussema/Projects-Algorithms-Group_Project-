@@ -36,7 +36,7 @@
 			class="container d-flex flex-column justify-content-between mt-3 border border-bottom-0 border-primary"
 			style="width: 1000px; background-color: #DAA520;">
 			<div class="text-center">
-				<h1 style="color: #ffffffc5;">المعطيات الخاصة بـ
+				<h1 style="color: #ffffffc5;">تحيين المعطيات الخاصة بـ
 					${employee.firstNameAr } ${employee.lastNameAr }</h1>
 				<a href="/admin_dashboard"><i
 					class='fa fa-home w3-xlarge btn btn-primary fw-bold'
@@ -142,11 +142,11 @@
 							type="text" class="form-control text-end" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label class="form-label fw-bold">Phone Number (رقم
+						<label dir="rtl" class="form-label d-flex justify-content-start fw-bold">Phone Number (رقم
 							الهاتف):</label>
 						<form:errors path="phoneNumber" class="text-danger" />
 						<form:input path="phoneNumber" value="${employee.phoneNumber}"
-							type=" text" class="form-control" />
+							type=" text" class="form-control" dir="rtl"/>
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<form:errors path="confirm" class="text-danger" />
@@ -215,8 +215,8 @@
 			class="container d-flex justify-content-center border border-top-0 border-primary"
 			style="width: 1000px; background-color: #DAA520;">
 			<button type="submit" class="btn btn-primary my-2 fw-bold"
-				style="width: 300px; background-color: #5b96c7ef; color: #161615;">Add
-				- إضافة</button>
+				style="width: 300px; background-color: #5b96c7ef; color: #161615;">Update
+				- تحيين</button>
 		</div>
 	</form:form>
 </body>

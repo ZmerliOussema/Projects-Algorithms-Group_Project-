@@ -57,8 +57,8 @@
 					<form:input  type="hidden"  class="form-control"  path="rangeEmployee" value="rangeEmployee"/>
 					<form:input  type="hidden"  class="form-control"  path="category" value="category"/>
 					<form:input  type="hidden"  class="form-control"  path="phoneNumber" value="216"/>
-	           <form:input  type="hidden"  class="form-control"  path="firstNameAr" value="firstNameAr"/>
-	           <form:input  type="hidden"  class="form-control"  path="lastNameAr" value="lastNameAr"/>
+	           <form:input  type="hidden"  class="form-control"  path="firstNameAr" value="أدمين"/>
+	           <form:input  type="hidden"  class="form-control"  path="lastNameAr" value="أدمين"/>
 	           <form:input  type="hidden"  class="form-control"  path="addressAr" value="addressAr"/>
 	            <form:input  type="hidden"  class="form-control"  path="titleAr" value="titleAr"/>
 	           <form:input  type="hidden"  class="form-control"  path="rangeAr" value="rangeAr"/>

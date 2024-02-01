@@ -123,13 +123,13 @@
 							class="form-control text-end" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label class="form-label fw-bold">Phone Number (رقم
+						<label dir="rtl" class="form-label d-flex justify-content-start fw-bold">Phone Number (رقم
 							الهاتف):</label>
 						<form:errors path="phoneNumber" class="text-danger" />
-						<form:input path="phoneNumber" type="text" class="form-control" />
+						<form:input path="phoneNumber" type="text" class="form-control" dir="rtl" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label class="form-label fw-bold" style="color: #8a0f0f;">Confirm
+						<label dir="rtl" class="form-label d-flex justify-content-start fw-bold" style="color: #8a0f0f;">Confirm
 							Password (تأكيد كلمة العبور):</label>
 						<form:errors path="confirm" class="text-danger" />
 						<form:input path="confirm" type="password" class="form-control" />
