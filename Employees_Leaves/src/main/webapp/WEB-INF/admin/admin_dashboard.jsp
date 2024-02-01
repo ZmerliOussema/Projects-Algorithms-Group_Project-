@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <link
@@ -22,7 +22,9 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 	crossorigin="anonymous"></script>
-<title>Admin Dashboard</title>
+	<!-- In your HTML file, include the Noty.js CSS and JavaScript files -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css" integrity="sha512-NXUhxhkDgZYOMjaIgd89zF2w51Mub53Ru3zCNp5LTlEzMbNNAjTjDbpURYGS5Mop2cU4b7re1nOIucsVlrx9fA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<title>Admin Dashboard</title>
 
 </head>
 <body style="background-color: #161615;">
@@ -58,12 +60,11 @@
 		</div>
 		<!-- Add search input -->
 <div class="input-group mt-3 mb-3">
-    <input type="text" class="form-control" id="searchInput">
+    <input type="text" class="form-control" id="searchInput" dir="rtl">
     <div class="input-group-prepend">
         <span class="input-group-text">ابحث بإسم الموظف</span>
     </div>
 </div>
-
 		<table
 			class="table table-secondary table-striped table-hover text text-center">
 			<thead>
@@ -114,7 +115,20 @@
 
 		</table>
 	</div>
+	<!-- Include Noty.js JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js" integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script>
+		// Get the error parameter from the URL
+		const urlParams = new URLSearchParams(window.location.search);
+		const error = urlParams.get('error');
+
+	// Check if error parameter exists and show alert
+	if (error) {
+		new Noty({
+			text: 'لا يمكن حذف هذا الموظف ',
+			type: 'error',
+		}).show();
+		}
 		document.getElementById('searchInput').addEventListener('keyup',
 				function() {
 					var input, filter, table, tr, td, i, txtValue;
@@ -135,6 +149,5 @@
 					}
 				});
 	</script>
-
 </body>
 </html>

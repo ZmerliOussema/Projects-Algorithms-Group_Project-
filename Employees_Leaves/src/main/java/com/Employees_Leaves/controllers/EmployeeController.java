@@ -1,5 +1,6 @@
 package com.Employees_Leaves.controllers;
 
+import com.Employees_Leaves.services.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	private LeaveService leaveService;
 
 //	DISPLAY ROUTES
 
@@ -233,8 +236,7 @@ public class EmployeeController {
 
 	// **** delete employee for admin******
 	@DeleteMapping("/employees/{id}/delete")
-	public String deleteEmployee(@PathVariable("id") Long id, HttpSession session) {
-
+	public String deleteEmployee(@PathVariable("id") Long id, HttpSession session, Model model) {
 		// Grab the user id from session
 		Long loggedInUserId = (Long) session.getAttribute("employeeId");
 		// Route guard
@@ -242,10 +244,11 @@ public class EmployeeController {
 		if (loggedInUserId == null || !"admin".equals(employeeService.findById(loggedInUserId).getRole())) {
 			return (loggedInUserId == null) ? "redirect:/logout" : "redirect:/employees/" + loggedInUserId;
 		} else {
-
+			if (leaveService.getLeavesByEmployeeId(id) != null) {
+				return "redirect:/admin_dashboard?error=1";
+			}
 			employeeService.deleteEmployee(id);
 		}
-
 		return "redirect:/admin_dashboard";
 	}
 
