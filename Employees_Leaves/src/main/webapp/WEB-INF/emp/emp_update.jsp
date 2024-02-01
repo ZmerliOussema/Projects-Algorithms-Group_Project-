@@ -31,7 +31,7 @@
 <body style="background-color: #161615;">
 	<form:form action="/employees/edit/${employee.id}" method="post"
 		modelAttribute="updateEmp">
-		
+
 		<div
 			class="container d-flex flex-column justify-content-between mt-3 border border-bottom-0 border-primary"
 			style="width: 1000px; background-color: #DAA520;">
@@ -47,7 +47,8 @@
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">First Name:</label>
 						<form:errors path="firstName" class="text-danger" />
-						<form:input path="firstName" value="${employee.firstName}" type="text" class="form-control" />
+						<form:input path="firstName" value="${employee.firstName}"
+							type="text" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">Last Name:</label>
@@ -64,51 +65,65 @@
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<form:errors path="password" class="text-danger" />
-						<form:input path="password" value="${employee.password}" type="hidden"
-							class=" form-control" />
+						<form:input path="password" value="${employee.password}"
+							type="hidden" class=" form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
-						<label class="form-label fw-bold">Adress:</label>
+						<label class="form-label fw-bold">Address:</label>
 						<form:errors path="address" class="text-danger" />
 						<form:input path="address" value="${employee.address}"
 							class="form-control" rows="2" />
 					</div>
 					<div class="form-label d-flex justify-content-between"
 						style="width: 470px;">
-						<div class="mb-3" style="width: 470px;">
+						<div class="mb-2" style="width: 470px;">
 							<label class="form-label fw-bold">Title:</label>
 							<form:errors path="title" class="text-danger" />
+							<c:set var="titles"
+								value="Technicien, Bibliothecaire, Conseiller, Gardien, Nettoyage" />
 							<form:select path="title" class="form-select">
-								<form:option value="technicien">Technicien</form:option>
-								<form:option value="bibliothecaire">Bibliothecaire</form:option>
-								<form:option value="conseiller">Conseiller</form:option>
-								<form:option value="gardien">Gardien</form:option>
-								<form:option value="nettoyage">Nettoyage</form:option>
+								<c:forEach var="oneTitle" items="${titles}">
+									<c:if test="${oneTitle == employee.title}">
+										<form:option selected="selected" value="${oneTitle}">${oneTitle}</form:option>
+									</c:if>
+									<c:if test="${oneTitle != employee.title}">
+										<form:option value="${oneTitle}">${oneTitle}</form:option>
+									</c:if>
+								</c:forEach>
 							</form:select>
 						</div>
 					</div>
 					<div class="form-label d-flex justify-content-between"
 						style="width: 470px;">
-						<div class="mb-3" style="width: 350px;">
+						<div class="mb-3" style="width: 470px;">
 							<label class="form-label fw-bold">Range:</label>
 							<form:errors path="rangeEmployee" class="text-danger" />
+							<c:set var="ranges"
+								value="Technicien, Bibliothecaire, Conseiller, Ouvrier, Administration" />
 							<form:select path="rangeEmployee" class="form-select">
-								<form:option value="technicien">technicien</form:option>
-								<form:option value="bibliothecaire">bibliothecaire</form:option>
-								<form:option value="conseiller">conseiller</form:option>
-								<form:option value="ouvrier">Ouvrier</form:option>
-								<form:option value="conseiller">Conseiller</form:option>
+								<c:forEach var="oneRange" items="${ranges}">
+									<c:if test="${oneRange == employee.rangeEmployee}">
+										<form:option selected="selected" value="${oneRange}">${oneRange}</form:option>
+									</c:if>
+									<c:if test="${oneRange != employee.rangeEmployee}">
+										<form:option value="${oneRange}">${oneRange}</form:option>
+									</c:if>
+								</c:forEach>
 							</form:select>
 						</div>
-						<div class="mb-3" style="width: 100px;">
-							<label class="form-label fw-bold">Category</label>
+						<div class="mb-3 ms-3" style="width: 100px;">
+							<label class="form-label fw-bold">Category:</label>
 							<form:errors path="category" class="text-danger" />
+							<c:set var="categories" value="A1, A2, A3, B, C" />
 							<form:select path="category" class="form-select">
-								<form:option value="A1">A1</form:option>
-								<form:option value="A2">A2</form:option>
-								<form:option value="A3">A3</form:option>
-								<form:option value="B">B</form:option>
-								<form:option value="C">C</form:option>
+								<c:forEach var="oneCategory" items="${categories}">
+									<c:if test="${oneCategory == employee.category}">
+										<form:option selected="selected" value="${oneCategory}">${oneCategory}</form:option>
+									</c:if>
+									<c:if test="${oneCategory != employee.category}">
+										<form:option value="${oneCategory}">${oneCategory}</form:option>
+									</c:if>
+								</c:forEach>
 							</form:select>
 						</div>
 					</div>
@@ -117,26 +132,26 @@
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label d-flex justify-content-end fw-bold">:الإسم</label>
 						<form:errors path="firstNameAr" class="text-danger" />
-						<form:input path="firstNameAr"
-							value="${employee.firstNameAr}" type="text"
-							class="form-control text-end" />
+						<form:input path="firstNameAr" value="${employee.firstNameAr}"
+							type="text" class="form-control text-end" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label d-flex justify-content-end fw-bold">:اللقب</label>
 						<form:errors path="lastNameAr" class="text-danger" />
-						<form:input path="lastNameAr" value="${employee.lastNameAr}" type="text"
-							class="form-control text-end" />
+						<form:input path="lastNameAr" value="${employee.lastNameAr}"
+							type="text" class="form-control text-end" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label fw-bold">Phone Number (رقم
 							الهاتف):</label>
 						<form:errors path="phoneNumber" class="text-danger" />
-						<form:input path="phoneNumber"
-							value="${employee.phoneNumber}" type=" text" class="form-control" />
+						<form:input path="phoneNumber" value="${employee.phoneNumber}"
+							type=" text" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<form:errors path="confirm" class="text-danger" />
-						<form:input path="confirm" value="${employee.password}" type="hidden" class="form-control" />
+						<form:input path="confirm" value="${employee.password}"
+							type="hidden" class="form-control" />
 					</div>
 					<div class="mb-3" style="width: 470px;">
 						<label
@@ -148,12 +163,16 @@
 					<div class="mb-3" style="width: 470px;">
 						<label class="form-label d-flex justify-content-end fw-bold">:الخطة</label>
 						<form:errors path="titleAr" class="text-danger" />
+						<c:set var="titlesAr" value="تقني, مكتبي, متصرف, حارس, تنظيف" />
 						<form:select path="titleAr" class="form-select text-end">
-							<form:option value="تقني">تقني</form:option>
-							<form:option value="مكتبي">مكتبي</form:option>
-							<form:option value="متصرف">متصرف</form:option>
-							<form:option value="حارس">حارس</form:option>
-							<form:option value="عون تنظيف">عون تنظيف</form:option>
+							<c:forEach var="oneTitleAr" items="${titlesAr}">
+								<c:if test="${oneTitleAr == employee.titleAr}">
+									<form:option selected="selected" value="${oneTitleAr}">${oneTitleAr}</form:option>
+								</c:if>
+								<c:if test="${oneTitleAr != employee.titleAr}">
+									<form:option value="${oneTitleAr}">${oneTitleAr}</form:option>
+								</c:if>
+							</c:forEach>
 						</form:select>
 					</div>
 					<div class="form-label d-flex justify-content-between"
@@ -161,23 +180,31 @@
 						<div class="mb-3" style="width: 100px;">
 							<label class="form-label d-flex justify-content-end fw-bold">:الصنف</label>
 							<form:errors path="rangeAr" class="text-danger" />
+							<c:set var="rangesAr" value="أ1, أ2, أ3, ب, ج" />
 							<form:select path="rangeAr" class="form-select text-end">
-								<form:option value="أ1">أ1</form:option>
-								<form:option value="أ2">أ2</form:option>
-								<form:option value="أ3">أ3</form:option>
-								<form:option value="ب">ب</form:option>
-								<form:option value="ج">ج</form:option>
+								<c:forEach var="oneRangeAr" items="${rangesAr}">
+									<c:if test="${oneRangeAr == employee.rangeAr}">
+										<form:option selected="selected" value="${oneRangeAr}">${oneRangeAr}</form:option>
+									</c:if>
+									<c:if test="${oneRangeAr != employee.rangeAr}">
+										<form:option value="${oneRangeAr}">${oneRangeAr}</form:option>
+									</c:if>
+								</c:forEach>
 							</form:select>
 						</div>
 						<div class="mb-3" style="width: 350px;">
 							<label class="form-label d-flex justify-content-end fw-bold">:الرتبة</label>
 							<form:errors path="categoryAr" class="text-danger" />
+							<c:set var="categoriesAr" value="تقني, مكتبي, متصرف, مستكتب إدارة, عامل" />
 							<form:select path="categoryAr" class="form-select text-end">
-								<form:option value="تقني">تقني</form:option>
-								<form:option value="مكتبي">مكتبي</form:option>
-								<form:option value="متصرف">متصرف</form:option>
-								<form:option value="مستكتب إدارة">مستكتب إدارة</form:option>
-								<form:option value="عامل">عامل</form:option>
+								<c:forEach var="onecategoryAr" items="${categoriesAr}">
+									<c:if test="${onecategoryAr == employee.categoryAr}">
+										<form:option selected="selected" value="${onecategoryAr}">${onecategoryAr}</form:option>
+									</c:if>
+									<c:if test="${onecategoryAr != employee.categoryAr}">
+										<form:option value="${onecategoryAr}">${onecategoryAr}</form:option>
+									</c:if>
+								</c:forEach>
 							</form:select>
 						</div>
 					</div>
