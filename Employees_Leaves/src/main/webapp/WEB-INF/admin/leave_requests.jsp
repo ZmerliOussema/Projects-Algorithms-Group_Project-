@@ -99,7 +99,7 @@
                         <td><fmt:formatDate value="${leave.end_date}" pattern="yyyy-MM-dd"/></td>
                         <td class="table-active "><fmt:formatDate value="${leave.start_date}"
                                                                   pattern="yyyy-MM-dd"/></td>
-                        <td>${leave.owner.firstNameAr}${leave.owner.lastNameAr}</td>
+                        <td>${leave.owner.firstNameAr} ${leave.owner.lastNameAr}</td>
                     </tr>
                 </c:when>
             </c:choose>
