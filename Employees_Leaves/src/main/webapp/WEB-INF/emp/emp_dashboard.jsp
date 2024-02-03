@@ -78,6 +78,7 @@
 			<form action="#" class="form">
 				<select class="form-select" style="width: 100px; height: 35px;"
 					name="year" id="year" onchange="filterLeavesByYear()">
+					<option value="2025">2025</option>
 					<option value="2024" selected>2024</option>
 					<option value="2023">2023</option>
 				</select>

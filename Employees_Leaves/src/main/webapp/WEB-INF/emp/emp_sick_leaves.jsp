@@ -54,10 +54,15 @@
             var endDateObj = new Date(endDate);
 
             // Calculate the difference in days
-            var differenceInDays = Math.floor((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
+            var differenceInDays = Math.floor((endDateObj - startDateObj) / (1000 * 60 * 60 * 24) + 1);
 
-            // Set the calculated value to the sick input
-            document.getElementById("sick").value = differenceInDays;
+            if (isNaN(differenceInDays)) {
+				// Set the calculated value to 0
+				document.getElementById("sick").value = 0;
+			} else {
+				// Set the calculated value to the total input
+				document.getElementById("sick").value = differenceInDays;
+			}	
         }
     </script>
 </head>
@@ -89,6 +94,7 @@
             <form action="#" class="form">
                 <select class="form-select" style="width: 100px; height: 35px;"
                         name="year" id="year" onchange="filterLeavesByYear()">
+                    <option value="2025">2025</option>
                     <option value="2024" selected>2024</option>
                     <option value="2023">2023</option>
                 </select>
@@ -162,15 +168,15 @@
                             - إضافة
                         </button>
                     </td>
-                    <td><form:input path="sick" type="number"
+                    <td><form:input path="sick"
                                     class="form-control text-center" name="sick" id="sick"
                                     value="0" style="background-color: #ebca6eaf;"/></td>
                     <td><form:input path="end_date" type="date"
-                                    class="form-control" name="end_date" id="end_date"
+                                    class="form-control text-center" name="end_date" id="end_date"
                                     onchange="calculateSick()"
                                     style="background-color: #ebca6eaf;"/></td>
                     <td><form:input path="start_date" type="date"
-                                    class="form-control" name="start_date" id="start_date"
+                                    class="form-control text-center" name="start_date" id="start_date"
                                     onchange="calculateSick()"
                                     style="background-color: #ebca6eaf;"/></td>
                     <form:errors path="owner" class="error"/>

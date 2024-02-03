@@ -53,10 +53,15 @@
             var endDateObj = new Date(endDate);
 
             // Calculate the difference in days
-            var differenceInDays = Math.floor((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
+            var differenceInDays = Math.floor((endDateObj - startDateObj) / (1000 * 60 * 60 * 24) + 1);
 
-            // Set the calculated value to the sick input
-            document.getElementById("specificLeave").value = differenceInDays;
+            if (isNaN(differenceInDays)) {
+				// Set the calculated value to 0
+				document.getElementById("specificLeave").value = 0;
+			} else {
+				// Set the calculated value to the total input
+				document.getElementById("specificLeave").value = differenceInDays;
+			}	
         }
     </script>
 </head>
@@ -87,6 +92,7 @@
             <form action="#" class="form">
                 <select class="form-select" style="width: 100px; height: 35px;"
                         name="year" id="year" onchange="filterLeavesByYear()">
+                    <option value="2025">2025</option>
                     <option value="2024" selected>2024</option>
                     <option value="2023">2023</option>
                 </select>
@@ -101,7 +107,7 @@
         <div
                 class="d-flex justify-content-center align-items-center grid gap-3">
             <h5 class="text text-center text-dark fw-semibold"
-                style="color: #ffffffc5;">يوما في السنة</h5>
+                style="color: #ffffffc5;">أيام في السنة</h5>
             <h5 class="text text-center text-dark fw-semibold"
                 style="color: #ffffffc5;">06</h5>
         </div>
@@ -160,11 +166,11 @@
                                     style="width: 200px; background-color: #5b96c7ef; color: #161615;">Add
                                 - إضافة</button>
                         </td>
-                        <td><form:input path="specificLeave" type="number" class="form-control text-center" name="specificLeave" id="specificLeave" value="0" style="background-color: #ebca6eaf;" /></td>
-                        <td><form:input path="end_date" type="date" class="form-control"
+                        <td><form:input path="specificLeave" class="form-control text-center" name="specificLeave" id="specificLeave" value="0" style="background-color: #ebca6eaf;" /></td>
+                        <td><form:input path="end_date" type="date" class="form-control text-center"
                                         name="end_date" id="end_date" onchange="calculateSpecificLeave()"
                                         style="background-color: #ebca6eaf;" /></td>
-                        <td><form:input path="start_date" type="date" class="form-control"
+                        <td><form:input path="start_date" type="date" class="form-control text-center"
                                         name="start_date" id="start_date" onchange="calculateSpecificLeave()"
                                         style="background-color: #ebca6eaf;" /></td>
                         <form:errors path="owner" class="error"/>

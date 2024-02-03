@@ -123,7 +123,6 @@
 			var differenceInDays = Math.floor((endDateObj - startDateObj)
 					/ (1000 * 60 * 60 * 24) + 1);
 			
-			console.log(differenceInDays);
 			if (isNaN(differenceInDays)) {
 				// Set the calculated value to 0
 				document.getElementById("total").value = 0;
