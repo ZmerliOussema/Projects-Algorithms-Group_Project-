@@ -22,7 +22,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 	crossorigin="anonymous"></script>
-<title>Employee Annual Leaves</title>
+<title>Leaves Request</title>
 </head>
 <body style="background-color: #161615;" onload="filterLeavesByYear()">
 	<div class="container my-3 border border-primary"
@@ -43,12 +43,10 @@
 			</div>
 		</nav>
 		<div
-			class="d-flex flex-column justify-content-center align-items-center grid gap-1 mt-5">
+			class="d-flex flex-column justify-content-center align-items-center grid gap-1 my-3">
 
 
-				<h3 class="text text-center text-dark fw-semibold">
-					طلب عطلة
-				</h3>
+			<h3 class="text text-center text-dark fw-semibold">طلب عطلة</h3>
 
 		</div>
 
@@ -72,20 +70,21 @@
 						<td>
 							<div class="d-flex justify-content-center align-items-center">
 								<button type="submit" class="btn btn-primary fw-bold"
-									style="width: 200px; background-color: #5b96c7ef; color: #161615;">Add
-									- إضافة</button>
+									style="width: 200px; background-color: #5b96c7ef; color: #161615;">Send
+									- إرســـال</button>
 							</div>
 						</td>
-						<td><input class="form-control" type="number" id="typeOfLeave"
-							 name="typeOfLeave" /></td>
-						<td><select class="form-control" id="leaveType"
+						<td><input class="form-control text-center" id="total"
+							name="total" /></td>
+						<td><select class="form-select" id="leaveType"
 							name="leaveType" onchange="updateAnnualInput()">
-								<option value="annual">سنوية</option>
-								<option value="specificLeave">استثنائية</option>
-								<option value="sick">مرضية</option>
+								<option value="annual" class="text-center">سنوية</option>
+								<option value="specificLeave" class="text-center">استثنائية</option>
+								<option value="sick" class="text-center">مرضية</option>
 						</select></td>
-						<td><form:input class="form-control" type="date"
-								path="end_date" id="end_date" onchange="calculateAnnual()" required="true" /></td>
+						<td><form:input class="form-control text-center" type="date"
+								path="end_date" id="end_date" onchange="calculateAnnual()"
+								required="true" /></td>
 						<td><form:input class="form-control text-center" type="date"
 								path="start_date" id="start_date" onchange="calculateAnnual()" required="true" /></td>
 					</tr>
@@ -96,22 +95,20 @@
 	</div>
 
 	<script>
-		function updateAnnualInput() {
+		
+	function updateAnnualInput() {
 			var leaveType = document.getElementById("leaveType").value;
-			var typeOfLeave = document.getElementById("typeOfLeave");
+			var total = document.getElementById("total");
 
 			if (leaveType === "annual") {
-				typeOfLeave.setAttribute("placeholder", "سنوية");
-				typeOfLeave.setAttribute("path", "annual");
-				typeOfLeave.setAttribute("name", "annual");
+				total.setAttribute("path", "annual");
+				total.setAttribute("name", "annual");
 			} else if (leaveType === "specificLeave") {
-				typeOfLeave.setAttribute("placeholder", "استثنائية");
-				typeOfLeave.setAttribute("path", "specificLeave");
-				typeOfLeave.setAttribute("name", "specificLeave");
+				total.setAttribute("path", "specificLeave");
+				total.setAttribute("name", "specificLeave");
 			} else if (leaveType === "sick") {
-				typeOfLeave.setAttribute("placeholder", "مرضية");
-				typeOfLeave.setAttribute("path", "sick");
-				typeOfLeave.setAttribute("name", "sick");
+				total.setAttribute("path", "sick");
+				total.setAttribute("name", "sick");
 			}
 		}
 		function calculateAnnual() {
@@ -124,22 +121,29 @@
 
 			// Calculate the difference in days
 			var differenceInDays = Math.floor((endDateObj - startDateObj)
-					/ (1000 * 60 * 60 * 24));
+					/ (1000 * 60 * 60 * 24) + 1);
+			
+			console.log(differenceInDays);
+			if (isNaN(differenceInDays)) {
+				// Set the calculated value to 0
+				document.getElementById("total").value = 0;
+			} else {
+				// Set the calculated value to the total input
+				document.getElementById("total").value = differenceInDays;
+			}			
 
-			// Set the calculated value to the sick input
-			document.getElementById("typeOfLeave").value = differenceInDays;
 		}
 		// Set default values when the page loads
-	    window.onload = function () {
-	        // Set placeholder for typeOfLeave input
-	        document.getElementById("typeOfLeave").setAttribute("placeholder", "سنوية");
-	        
-	        // Set default value for leaveType select
-	        document.getElementById("leaveType").value = "annual";
-	        
-	        // Call updateAnnualInput to ensure consistency
-	        updateAnnualInput();
-	    };
+		window.onload = function() {
+			// Set placeholder for total input
+			document.getElementById("total").setAttribute("placeholder", "0");
+
+			// Set default value for leaveType select
+			document.getElementById("leaveType").value = "annual";
+
+			// Call updateAnnualInput to ensure consistency
+			updateAnnualInput();
+		};
 	</script>
 
 </body>
